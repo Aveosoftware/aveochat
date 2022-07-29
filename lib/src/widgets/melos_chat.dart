@@ -1,8 +1,11 @@
 part of '../../melos_chat.dart';
 
 Widget MelosChatScreen(
-  BuildContext context,
-) {
+  BuildContext context, {
+  bool allowUserSearch = true,
+  String searchHint = 'Search',
+  Color? initialsBackgroundColor,
+}) {
   return LayoutBuilder(
     builder: (context, constraints) => Container(
       constraints: BoxConstraints(minHeight: constraints.maxHeight),
@@ -11,35 +14,44 @@ Widget MelosChatScreen(
         child: Column(
           mainAxisSize: MainAxisSize.max,
           children: [
-            Container(
-              height: 40,
-              margin: const EdgeInsets.only(left: 8.0, right: 8.0, top: 16.0),
-              child: TextField(
-                readOnly: true,
-                decoration: InputDecoration(
-                  contentPadding: const EdgeInsets.only(top: 16.0, left: 16.0),
-                  hintText: 'Search',
-                  filled: true,
-                  suffixIcon: const Icon(Icons.search, color: Colors.grey),
-                  border: const OutlineInputBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(54.0),
-                    ),
-                    borderSide: BorderSide.none,
-                  ),
-                ),
-                onTap: () async {
-                  await showSearch(
-                    context: context,
-                    delegate: TheSearch(),
-                    query: "",
-                  );
-                },
-              ),
-            ),
-            const SizedBox(
-              height: 12.0,
-            ),
+            allowUserSearch
+                ? Column(
+                    children: [
+                      Container(
+                        height: 40,
+                        margin: const EdgeInsets.only(
+                            left: 8.0, right: 8.0, top: 16.0),
+                        child: TextField(
+                          readOnly: true,
+                          decoration: InputDecoration(
+                            contentPadding:
+                                const EdgeInsets.only(top: 16.0, left: 16.0),
+                            hintText: searchHint,
+                            filled: true,
+                            suffixIcon:
+                                const Icon(Icons.search, color: Colors.grey),
+                            border: const OutlineInputBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(54.0),
+                              ),
+                              borderSide: BorderSide.none,
+                            ),
+                          ),
+                          onTap: () async {
+                            await showSearch(
+                              context: context,
+                              delegate: TheSearch(),
+                              query: "",
+                            );
+                          },
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 12.0,
+                      ),
+                    ],
+                  )
+                : Container(),
             StreamBuilder(
               stream: MelosChat.instance.firebaseChatService
                   .getChatsStreamByUserId(
@@ -64,7 +76,8 @@ Widget MelosChatScreen(
                         },
                         leading: CircleAvatar(
                           radius: 20,
-                          backgroundColor: Theme.of(context).primaryColor,
+                          backgroundColor: initialsBackgroundColor ??
+                              Theme.of(context).primaryColor,
                           child: Text(chatName[0].toUpperCase()),
                         ),
                         title: Text(chatName.toTitleCase()),
