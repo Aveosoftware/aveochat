@@ -24,7 +24,8 @@ class _ChatRoomState extends State<ChatRoom> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey,
+      resizeToAvoidBottomInset: true,
+      backgroundColor: MelosChat.instance.melosChatThemeData.backgroundColor,
       appBar: AppBar(
         title: Text(MelosChat.instance.firebaseChatService.getChatRoomName(
             chat: widget.chat, thisUserId: MelosChat.instance.user.userId)),
@@ -34,7 +35,15 @@ class _ChatRoomState extends State<ChatRoom> {
             .getConversationStreamByChatId(
                 chatId: widget.chat.chatId, descending: true),
         builder: (context, AsyncSnapshot<List<Message>> snapshot) {
-          if (snapshot.hasData) {
+          // WHEN LOADING
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              heightFactor: 8,
+              child: CircularProgressIndicator(),
+            );
+          }
+          // WHEN DATA IS LOADED
+          if (snapshot.hasData && snapshot.data!.isNotEmpty) {
             return Column(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.end,
@@ -46,27 +55,50 @@ class _ChatRoomState extends State<ChatRoom> {
                     itemCount: snapshot.data?.length,
                     itemBuilder: (context, index) {
                       return MessageTile(
-                          message: snapshot.data![index].message,
-                          isMessageSent: snapshot.data![index].sentBy ==
-                              MelosChat.instance.user.userId,
-                          receivedMessageTileColor: Colors.blueGrey,
-                          receivedMessageColor: Colors.white,
-                          timestamp: snapshot.data![index].timestamp);
+                        context,
+                        message: snapshot.data![index].message,
+                        isMessageSent: snapshot.data![index].sentBy ==
+                            MelosChat.instance.user.userId,
+                        timestamp: snapshot.data![index].timestamp,
+                        receivedMessageTileColor: MelosChat
+                                .instance
+                                .melosChatThemeData
+                                .chatRoomThemeData
+                                ?.receivedMessageColor ??
+                            Colors.blueGrey,
+                        receivedMessageColor: MelosChat
+                                .instance
+                                .melosChatThemeData
+                                .chatRoomThemeData
+                                ?.receivedMessageColor ??
+                            Colors.white,
+                        sentMessageColor: MelosChat.instance.melosChatThemeData
+                                .chatRoomThemeData?.sentMessageColor ??
+                            Colors.white,
+                        sentMessageTileColor: MelosChat
+                                .instance
+                                .melosChatThemeData
+                                .chatRoomThemeData
+                                ?.sentMessageTileColor ??
+                            Theme.of(context).primaryColor,
+                      );
                     },
                   ),
                 ),
               ],
             );
           }
+          // IF NO DATA IS AVAILABLE
           return const Center(
-            child: CircularProgressIndicator(),
+            heightFactor: 8,
+            child: Text("Send a Hii..!"),
           );
         },
       ),
       bottomNavigationBar: SafeArea(
         child: Container(
           margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-          padding: const EdgeInsets.all(0.0),
+          padding: MediaQuery.of(context).viewInsets,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(34.0),
@@ -78,29 +110,33 @@ class _ChatRoomState extends State<ChatRoom> {
             title: TextFormField(
               controller: messageController,
               maxLines: null,
-              decoration: const InputDecoration(
-                hintText: "Message",
-                focusedBorder: OutlineInputBorder(borderSide: BorderSide.none),
-                enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
+              decoration: InputDecoration(
+                hintText: MelosChat
+                    .instance.melosChatThemeData.chatRoomThemeData!.messageHint,
+                focusedBorder:
+                    const OutlineInputBorder(borderSide: BorderSide.none),
+                enabledBorder:
+                    const OutlineInputBorder(borderSide: BorderSide.none),
               ),
             ),
             trailing: IconButton(
-              icon: const Icon(Icons.send, color: Colors.blue),
+              icon: MelosChat
+                  .instance.melosChatThemeData.chatRoomThemeData!.sendIcon,
               onPressed: () async {
                 if (messageController.text.trim().isNotEmpty) {
                   try {
+                    String trimmedMsg = messageController.text.trim();
+                    messageController.clear();
                     await MelosChat.instance.firebaseChatService
                         .sendMessageByChatId(
-                            chatId: widget.chat.chatId,
-                            message: Message(
-                              message: messageController.text.trim(),
-                              sentBy: MelosChat.instance.user.userId,
-                            ));
+                      chatId: widget.chat.chatId,
+                      message: Message(
+                        message: trimmedMsg,
+                        sentBy: MelosChat.instance.user.userId,
+                      ),
+                    );
                   } catch (e) {
                     print(e);
-                  } finally {
-                    messageController.clear();
-                    setState(() {});
                   }
                 }
               },

@@ -1,91 +1,60 @@
 part of '../../melos_chat.dart';
 
 Widget MelosChatScreen(
-  BuildContext context, {
-  bool allowUserSearch = true,
-  String searchHint = 'Search',
-  Color? initialsBackgroundColor,
-}) {
+  BuildContext context,
+) {
   return LayoutBuilder(
     builder: (context, constraints) => Container(
+      color: MelosChat.instance.melosChatThemeData.backgroundColor,
       constraints: BoxConstraints(minHeight: constraints.maxHeight),
       child: SingleChildScrollView(
         primary: true,
         child: Column(
           mainAxisSize: MainAxisSize.max,
           children: [
-            allowUserSearch
-                ? Column(
-                    children: [
-                      Container(
-                        height: 40,
-                        margin: const EdgeInsets.only(
-                            left: 8.0, right: 8.0, top: 16.0),
-                        child: TextField(
-                          readOnly: true,
-                          decoration: InputDecoration(
-                            contentPadding:
-                                const EdgeInsets.only(top: 16.0, left: 16.0),
-                            hintText: searchHint,
-                            filled: true,
-                            suffixIcon:
-                                const Icon(Icons.search, color: Colors.grey),
-                            border: const OutlineInputBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(54.0),
-                              ),
-                              borderSide: BorderSide.none,
-                            ),
-                          ),
-                          onTap: () async {
-                            await showSearch(
-                              context: context,
-                              delegate: TheSearch(),
-                              query: "",
-                            );
-                          },
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 12.0,
-                      ),
-                    ],
-                  )
-                : Container(),
+            SearchBox(
+              context,
+              allowUserSearch:
+                  MelosChat.instance.melosChatThemeData.allowUserSearch,
+              searchHint: MelosChat.instance.melosChatThemeData.searchHint,
+            ),
             StreamBuilder(
               stream: MelosChat.instance.firebaseChatService
                   .getChatsStreamByUserId(
                       uniqueUserId: MelosChat.instance.user.userId),
               builder: (context, AsyncSnapshot<List<ChatRoomModel>> snapshot) {
+                // WHEN LOADING
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    heightFactor: 8,
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                // WHEN DATA IS LOADED
                 if (snapshot.hasData) {
                   return ListView.builder(
                     itemCount: snapshot.data!.length,
                     shrinkWrap: true,
                     primary: false,
                     itemBuilder: (context, index) {
-                      String chatName = MelosChat.instance.firebaseChatService
-                          .getChatRoomName(
-                              chat: snapshot.data![index],
-                              thisUserId: MelosChat.instance.user.userId);
-                      return ListTile(
-                        onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) =>
-                                ChatRoom(chat: snapshot.data![index]),
-                          ));
-                        },
-                        leading: CircleAvatar(
-                          radius: 20,
-                          backgroundColor: initialsBackgroundColor ??
-                              Theme.of(context).primaryColor,
-                          child: Text(chatName[0].toUpperCase()),
-                        ),
-                        title: Text(chatName.toTitleCase()),
+                      return MelosChatTile(
+                        context,
+                        chatName: MelosChat.instance.firebaseChatService
+                            .getChatRoomName(
+                                chat: snapshot.data![index],
+                                thisUserId: MelosChat.instance.user.userId),
+                        chatTileColor:
+                            MelosChat.instance.melosChatThemeData.chatTileColor,
+                        avatarBackgroundColor: MelosChat
+                            .instance.melosChatThemeData.avatarBackgroundColor,
+                        chat: snapshot.data![index],
                       );
                     },
                   );
                 }
+                // IF NO DATA IS AVAILABLE
                 return const Center(
+                  heightFactor: 8,
                   child: Text("Search for people & get started chatting."),
                 );
               },

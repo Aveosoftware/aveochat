@@ -10,4 +10,7 @@ export 'package:firebase_chat/firebase_chat.dart';
 
 part 'src/chat_configs.dart';
 part 'src/widgets/melos_chat.dart';
+part 'src/widgets/melos_chat_tile.dart';
 part 'src/widgets/message_tile.dart';
+part 'src/widgets/search_box.dart';
+part 'src/widgets/theme_data.dart';

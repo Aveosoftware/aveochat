@@ -61,7 +61,9 @@ class TheSearch extends SearchDelegate<String> {
                                 otherUser: snapshot.data[index]);
                         close(context, '');
                         Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => ChatRoom(chat: chatRoom),
+                          builder: (context) => ChatRoom(
+                            chat: chatRoom,
+                          ),
                         ));
                       } catch (e, s) {
                         print(s);

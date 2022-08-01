@@ -1,12 +1,13 @@
 part of '../../melos_chat.dart';
 
-Widget MessageTile({
+Widget MessageTile(
+  BuildContext context, {
   required String message,
   required bool isMessageSent,
-  Color? sentMessageColor,
-  Color? receivedMessageColor,
-  Color? sentMessageTileColor,
-  Color? receivedMessageTileColor,
+  required Color sentMessageColor,
+  required Color receivedMessageColor,
+  required Color sentMessageTileColor,
+  required Color receivedMessageTileColor,
   String? timestamp,
 }) {
   return ListTile(
@@ -20,8 +21,8 @@ Widget MessageTile({
             Container(
               decoration: BoxDecoration(
                 color: isMessageSent
-                    ? sentMessageTileColor ?? Colors.blue
-                    : receivedMessageTileColor ?? Colors.black26,
+                    ? sentMessageTileColor
+                    : receivedMessageTileColor,
                 borderRadius: BorderRadius.only(
                   topLeft: const Radius.circular(14),
                   topRight: const Radius.circular(14),
@@ -36,9 +37,8 @@ Widget MessageTile({
               child: Text(
                 message,
                 style: TextStyle(
-                  color: isMessageSent
-                      ? sentMessageColor ?? Colors.white
-                      : receivedMessageColor ?? Colors.black,
+                  color:
+                      isMessageSent ? sentMessageColor : receivedMessageColor,
                 ),
               ),
             ),
