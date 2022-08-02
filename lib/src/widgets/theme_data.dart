@@ -7,6 +7,7 @@ class ChatRoomThemeData {
   final Color? receivedMessageColor;
   final Color? sentMessageTileColor;
   final Color? receivedMessageTileColor;
+  final Color? backgroundColor;
 
   const ChatRoomThemeData({
     this.messageHint = 'Message',
@@ -17,6 +18,7 @@ class ChatRoomThemeData {
     this.receivedMessageColor,
     this.sentMessageTileColor,
     this.receivedMessageTileColor,
+    this.backgroundColor,
   });
 }
 
@@ -26,7 +28,6 @@ class MelosChatThemeData {
   final Color? avatarBackgroundColor;
   final Color? chatTileColor;
   final Color? backgroundColor;
-  final Color? chatBackgroundColor;
   final ChatRoomThemeData? chatRoomThemeData;
 
   const MelosChatThemeData({
@@ -35,7 +36,6 @@ class MelosChatThemeData {
     this.avatarBackgroundColor,
     this.chatTileColor,
     this.backgroundColor,
-    this.chatBackgroundColor,
     this.chatRoomThemeData,
   });
 }

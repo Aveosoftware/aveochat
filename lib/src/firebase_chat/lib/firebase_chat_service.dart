@@ -38,4 +38,8 @@ abstract class FirebaseChatService {
   /// [EXPERIMENTAL] Returns a list of Users by providing a search query.
   Future<List<MelosUser>> findUsersBySearchQuery(
       {required String query, required MelosUser user});
+
+  /// Delete the selected messages from the list of given chatId.
+  Future<bool> deleteConversation(
+      {required String chatId, required List<String> selectedMessageIds});
 }

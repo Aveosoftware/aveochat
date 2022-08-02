@@ -90,6 +90,7 @@ class FirebaseChatServiceImpl extends FirebaseChatService {
           .doc(chatId)
           .collection(Collections.CONVERSATIONS)
           .add(message.toMap());
+      await doc.update({'msgId': doc.id});
     } on Exception catch (e, s) {
       if (kDebugMode) {
         print(s);
@@ -193,5 +194,25 @@ class FirebaseChatServiceImpl extends FirebaseChatService {
       print(s);
     }
     return suggestions;
+  }
+
+  @override
+  Future<bool> deleteConversation({
+    required String chatId,
+    required List<String> selectedMessageIds,
+  }) async {
+    try {
+      for (String id in selectedMessageIds) {
+        await db
+            .collection(Collections.CHATROOMS)
+            .doc(chatId)
+            .collection(Collections.CONVERSATIONS)
+            .doc(id)
+            .delete();
+      }
+    } catch (e) {
+      return false;
+    }
+    return true;
   }
 }

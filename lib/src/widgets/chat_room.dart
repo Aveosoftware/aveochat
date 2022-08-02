@@ -17,6 +17,9 @@ class _ChatRoomState extends State<ChatRoom> {
   late List<Message> conversation = [];
   TextEditingController messageController = TextEditingController();
 
+  List<String> selectionList = [];
+  bool hasSelectionStarted = false;
+
   @override
   void initState() {
     conversationStream = MelosChat.instance.firebaseChatService
@@ -25,14 +28,41 @@ class _ChatRoomState extends State<ChatRoom> {
     super.initState();
   }
 
+  deleteSelection() async {
+    await MelosChat.instance.firebaseChatService.deleteConversation(
+      chatId: widget.chat.chatId,
+      selectedMessageIds: selectionList,
+    );
+    hasSelectionStarted = false;
+    setState(() {});
+    selectionList.clear();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      backgroundColor: MelosChat.instance.melosChatThemeData.backgroundColor,
+      backgroundColor: MelosChat
+              .instance.melosChatThemeData.chatRoomThemeData?.backgroundColor ??
+          Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: Text(MelosChat.instance.firebaseChatService.getChatRoomName(
-            chat: widget.chat, thisUserId: MelosChat.instance.user.userId)),
+        title: Text(
+          MelosChat.instance.firebaseChatService.getChatRoomName(
+              chat: widget.chat, thisUserId: MelosChat.instance.user.userId),
+        ),
+        actions: [
+          hasSelectionStarted
+              ? IconButton(
+                  onPressed: () async {
+                    await deleteSelection();
+                  },
+                  icon: const Icon(
+                    Icons.delete,
+                    color: Colors.redAccent,
+                  ),
+                )
+              : Container()
+        ],
       ),
       body: StreamBuilder(
         stream: conversationStream,
@@ -58,6 +88,8 @@ class _ChatRoomState extends State<ChatRoom> {
                     itemBuilder: (context, index) {
                       return MessageTile(
                         context,
+                        isSelected:
+                            selectionList.contains(snapshot.data![index].msgId),
                         message: snapshot.data![index].message,
                         isMessageSent: snapshot.data![index].sentBy ==
                             MelosChat.instance.user.userId,
@@ -83,6 +115,33 @@ class _ChatRoomState extends State<ChatRoom> {
                                 .chatRoomThemeData
                                 ?.sentMessageTileColor ??
                             Theme.of(context).primaryColor,
+                        onLongPress: () {
+                          if (!hasSelectionStarted) {
+                            if (snapshot.data![index].sentBy ==
+                                MelosChat.instance.user.userId) {
+                              selectionList.add(snapshot.data![index].msgId);
+                              hasSelectionStarted = true;
+                              setState(() {});
+                            }
+                          }
+                        },
+                        onTap: () {
+                          if (hasSelectionStarted) {
+                            if (selectionList
+                                .contains(snapshot.data![index].msgId)) {
+                              selectionList.remove(snapshot.data![index].msgId);
+                              if (selectionList.isEmpty) {
+                                hasSelectionStarted = false;
+                              }
+                            } else {
+                              if (snapshot.data![index].sentBy ==
+                                  MelosChat.instance.user.userId) {
+                                selectionList.add(snapshot.data![index].msgId);
+                              }
+                            }
+                            setState(() {});
+                          }
+                        },
                       );
                     },
                   ),
