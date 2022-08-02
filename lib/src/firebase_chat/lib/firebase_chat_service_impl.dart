@@ -141,6 +141,25 @@ class FirebaseChatServiceImpl extends FirebaseChatService {
       {required MelosUser currentUser, required MelosUser otherUser}) async {
     late ChatRoomModel newCreatedChat;
     try {
+      MelosUser myUser = MelosUser.fromMap(
+          (await db.collection(Collections.USERS).doc(currentUser.userId).get())
+              .data()!);
+      if (myUser.chats != null && myUser.chats!.isNotEmpty) {
+        for (var chatRoomId in myUser.chats!) {
+          ChatRoomModel snap = ChatRoomModel.fromMap(
+              (await db.collection(Collections.CHATROOMS).doc(chatRoomId).get())
+                  .data()!);
+          List<MelosUser?>? users = snap.participants;
+          if (snap.participants.length == 2 &&
+              users.firstWhereOrNull(
+                      (element) => element!.userId == otherUser.userId) !=
+                  null) {
+            newCreatedChat = snap;
+            return newCreatedChat;
+          }
+        }
+      }
+
       var docRef = await db.collection(Collections.CHATROOMS).add(
             ChatRoomModel(
                     chatId: "",

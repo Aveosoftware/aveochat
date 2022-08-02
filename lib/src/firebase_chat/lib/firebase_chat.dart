@@ -1,9 +1,9 @@
 library firebase_chat_firestore;
 
 import 'dart:async';
-import 'dart:core';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 
 part 'config.dart';
