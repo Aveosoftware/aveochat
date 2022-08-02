@@ -13,11 +13,15 @@ class ChatRoom extends StatefulWidget {
 }
 
 class _ChatRoomState extends State<ChatRoom> {
+  late Stream<List<Message>> conversationStream;
   late List<Message> conversation = [];
   TextEditingController messageController = TextEditingController();
 
   @override
   void initState() {
+    conversationStream = MelosChat.instance.firebaseChatService
+        .getConversationStreamByChatId(
+            chatId: widget.chat.chatId, descending: true);
     super.initState();
   }
 
@@ -31,9 +35,7 @@ class _ChatRoomState extends State<ChatRoom> {
             chat: widget.chat, thisUserId: MelosChat.instance.user.userId)),
       ),
       body: StreamBuilder(
-        stream: MelosChat.instance.firebaseChatService
-            .getConversationStreamByChatId(
-                chatId: widget.chat.chatId, descending: true),
+        stream: conversationStream,
         builder: (context, AsyncSnapshot<List<Message>> snapshot) {
           // WHEN LOADING
           if (snapshot.connectionState == ConnectionState.waiting) {
