@@ -5,12 +5,14 @@ class Message {
   String message;
   String sentBy;
   String? timestamp;
+  bool isDeleted;
 
   Message({
     this.msgId = '',
     required this.message,
     required this.sentBy,
     this.timestamp,
+    this.isDeleted = false,
   }) {
     timestamp = DateTime.now().toUtc().toIso8601String();
   }
@@ -21,6 +23,7 @@ class Message {
       'message': message,
       'sent_by': sentBy,
       'timestamp': timestamp,
+      'isDeleted': isDeleted,
     };
   }
 
@@ -30,6 +33,7 @@ class Message {
       message: map['message'] as String,
       sentBy: map['sent_by'] as String,
       timestamp: map['timestamp'] as String,
+      isDeleted: map['isDeleted'] as bool,
     );
   }
 }

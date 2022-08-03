@@ -227,7 +227,7 @@ class FirebaseChatServiceImpl extends FirebaseChatService {
             .doc(chatId)
             .collection(Collections.CONVERSATIONS)
             .doc(id)
-            .delete();
+            .update({'isDeleted': true});
       }
     } catch (e) {
       return false;

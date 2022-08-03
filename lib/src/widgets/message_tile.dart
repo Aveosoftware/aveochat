@@ -12,6 +12,7 @@ Widget MessageTile(
   onLongPress,
   String? timestamp,
   bool isSelected = false,
+  required bool isDeleted,
 }) {
   return ListTile(
     tileColor: isSelected ? Colors.grey[400] : null,
@@ -35,8 +36,13 @@ Widget MessageTile(
         ),
         padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
         child: Text(
-          message,
+          isDeleted
+              ? isMessageSent
+                  ? "🚫 You deleted this message"
+                  : "🚫 This message was deleted"
+              : message,
           style: TextStyle(
+            fontStyle: isDeleted ? FontStyle.italic : FontStyle.normal,
             color: isMessageSent ? sentMessageColor : receivedMessageColor,
           ),
         ),

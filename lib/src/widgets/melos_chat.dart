@@ -21,7 +21,7 @@ class _MelosChatScreenState extends State<MelosChatScreen> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) => Container(
-        color: MelosChat.instance.melosChatThemeData.backgroundColor,
+        color: MelosChat.instance.melosChatOptions.backgroundColor,
         constraints: BoxConstraints(minHeight: constraints.maxHeight),
         child: SingleChildScrollView(
           primary: true,
@@ -31,8 +31,8 @@ class _MelosChatScreenState extends State<MelosChatScreen> {
               SearchBox(
                 context,
                 allowUserSearch:
-                    MelosChat.instance.melosChatThemeData.allowUserSearch,
-                searchHint: MelosChat.instance.melosChatThemeData.searchHint,
+                    MelosChat.instance.melosChatOptions.allowUserSearch,
+                searchHint: MelosChat.instance.melosChatOptions.searchHint,
               ),
               StreamBuilder(
                 stream: chatsStream,
@@ -58,10 +58,10 @@ class _MelosChatScreenState extends State<MelosChatScreen> {
                               .getChatRoomName(
                                   chat: snapshot.data![index],
                                   thisUserId: MelosChat.instance.user.userId),
-                          chatTileColor: MelosChat
-                              .instance.melosChatThemeData.chatTileColor,
-                          avatarBackgroundColor: MelosChat.instance
-                              .melosChatThemeData.avatarBackgroundColor,
+                          chatTileColor:
+                              MelosChat.instance.melosChatOptions.chatTileColor,
+                          avatarBackgroundColor: MelosChat
+                              .instance.melosChatOptions.avatarBackgroundColor,
                           chat: snapshot.data![index],
                         );
                       },

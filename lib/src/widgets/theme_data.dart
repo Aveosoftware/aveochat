@@ -22,16 +22,18 @@ class ChatRoomThemeData {
   });
 }
 
-class MelosChatThemeData {
+class MelosChatOptions {
   final bool allowUserSearch;
+  final bool allowMessageDeletion;
   final String searchHint;
   final Color? avatarBackgroundColor;
   final Color? chatTileColor;
   final Color? backgroundColor;
   final ChatRoomThemeData? chatRoomThemeData;
 
-  const MelosChatThemeData({
+  const MelosChatOptions({
     this.allowUserSearch = true,
+    this.allowMessageDeletion = true,
     this.searchHint = 'Search',
     this.avatarBackgroundColor,
     this.chatTileColor,

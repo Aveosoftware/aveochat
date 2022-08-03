@@ -43,7 +43,7 @@ class _ChatRoomState extends State<ChatRoom> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: MelosChat
-              .instance.melosChatThemeData.chatRoomThemeData?.backgroundColor ??
+              .instance.melosChatOptions.chatRoomThemeData?.backgroundColor ??
           Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(
@@ -51,16 +51,18 @@ class _ChatRoomState extends State<ChatRoom> {
               chat: widget.chat, thisUserId: MelosChat.instance.user.userId),
         ),
         actions: [
-          hasSelectionStarted
-              ? IconButton(
-                  onPressed: () async {
-                    await deleteSelection();
-                  },
-                  icon: const Icon(
-                    Icons.delete,
-                    color: Colors.redAccent,
-                  ),
-                )
+          MelosChat.instance.melosChatOptions.allowMessageDeletion
+              ? hasSelectionStarted
+                  ? IconButton(
+                      onPressed: () async {
+                        await deleteSelection();
+                      },
+                      icon: const Icon(
+                        Icons.delete,
+                        color: Colors.redAccent,
+                      ),
+                    )
+                  : Container()
               : Container()
         ],
       ),
@@ -90,28 +92,29 @@ class _ChatRoomState extends State<ChatRoom> {
                         context,
                         isSelected:
                             selectionList.contains(snapshot.data![index].msgId),
+                        isDeleted: snapshot.data![index].isDeleted,
                         message: snapshot.data![index].message,
                         isMessageSent: snapshot.data![index].sentBy ==
                             MelosChat.instance.user.userId,
                         timestamp: snapshot.data![index].timestamp,
                         receivedMessageTileColor: MelosChat
                                 .instance
-                                .melosChatThemeData
+                                .melosChatOptions
                                 .chatRoomThemeData
                                 ?.receivedMessageColor ??
                             Colors.blueGrey,
                         receivedMessageColor: MelosChat
                                 .instance
-                                .melosChatThemeData
+                                .melosChatOptions
                                 .chatRoomThemeData
                                 ?.receivedMessageColor ??
                             Colors.white,
-                        sentMessageColor: MelosChat.instance.melosChatThemeData
+                        sentMessageColor: MelosChat.instance.melosChatOptions
                                 .chatRoomThemeData?.sentMessageColor ??
                             Colors.white,
                         sentMessageTileColor: MelosChat
                                 .instance
-                                .melosChatThemeData
+                                .melosChatOptions
                                 .chatRoomThemeData
                                 ?.sentMessageTileColor ??
                             Theme.of(context).primaryColor,
@@ -173,7 +176,7 @@ class _ChatRoomState extends State<ChatRoom> {
               maxLines: null,
               decoration: InputDecoration(
                 hintText: MelosChat
-                    .instance.melosChatThemeData.chatRoomThemeData!.messageHint,
+                    .instance.melosChatOptions.chatRoomThemeData!.messageHint,
                 focusedBorder:
                     const OutlineInputBorder(borderSide: BorderSide.none),
                 enabledBorder:
@@ -182,7 +185,7 @@ class _ChatRoomState extends State<ChatRoom> {
             ),
             trailing: IconButton(
               icon: MelosChat
-                  .instance.melosChatThemeData.chatRoomThemeData!.sendIcon,
+                  .instance.melosChatOptions.chatRoomThemeData!.sendIcon,
               onPressed: () async {
                 if (messageController.text.trim().isNotEmpty) {
                   try {

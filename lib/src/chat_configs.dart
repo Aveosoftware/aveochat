@@ -19,7 +19,7 @@ class MelosChat {
   late FirebaseChatService firebaseChatService;
 
   // Customisations
-  late MelosChatThemeData melosChatThemeData;
+  late MelosChatOptions melosChatOptions;
 
   MelosChat.internal();
   static final MelosChat instance = MelosChat.internal();
@@ -27,11 +27,11 @@ class MelosChat {
   factory MelosChat({
     required ChatServices service,
     required MelosUser user,
-    MelosChatThemeData melosChatThemeData = const MelosChatThemeData(),
+    MelosChatOptions melosChatOptions = const MelosChatOptions(),
   }) {
     instance.chatService = service;
     instance.user = user;
-    instance.melosChatThemeData = melosChatThemeData;
+    instance.melosChatOptions = melosChatOptions;
     return instance;
   }
 
