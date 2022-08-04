@@ -4,18 +4,16 @@ class Message {
   String msgId;
   String message;
   String sentBy;
-  String? timestamp;
+  String timestamp;
   bool isDeleted;
 
   Message({
     this.msgId = '',
     required this.message,
     required this.sentBy,
-    this.timestamp,
+    required this.timestamp,
     this.isDeleted = false,
-  }) {
-    timestamp = DateTime.now().toUtc().toIso8601String();
-  }
+  });
 
   Map<String, dynamic> toMap() {
     return {

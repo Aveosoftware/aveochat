@@ -198,6 +198,7 @@ class _ChatRoomState extends State<ChatRoom> {
                       message: Message(
                         message: trimmedMsg,
                         sentBy: MelosChat.instance.user.userId,
+                        timestamp: DateTime.now().toUtc().toIso8601String(),
                       ),
                     );
                   } catch (e) {

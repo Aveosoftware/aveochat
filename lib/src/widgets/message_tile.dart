@@ -35,31 +35,44 @@ Widget MessageBubble(
           ),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
-        child: isDeleted
-            ? Text(
-                isMessageSent
-                    ? "🚫 You deleted this message"
-                    : "🚫 This message was deleted",
-                style: TextStyle(
-                  fontStyle: isDeleted ? FontStyle.italic : FontStyle.normal,
-                  color:
-                      isMessageSent ? sentMessageColor : receivedMessageColor,
-                ),
-              )
-            : ReadMoreText(
-                message,
-                colorClickableText: isMessageSent
-                    ? sentMessageColor.withOpacity(0.6)
-                    : receivedMessageColor.withOpacity(0.6),
-                trimMode: TrimMode.Length,
-                trimCollapsedText: 'Show more',
-                trimExpandedText: 'Show less',
-                style: TextStyle(
-                  fontStyle: isDeleted ? FontStyle.italic : FontStyle.normal,
-                  color:
-                      isMessageSent ? sentMessageColor : receivedMessageColor,
-                ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment:
+              isMessageSent ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+          children: [
+            ReadMoreText(
+              isDeleted
+                  ? isMessageSent
+                      ? "🚫 You deleted this message"
+                      : "🚫 This message was deleted"
+                  : message,
+              textAlign: TextAlign.start,
+              colorClickableText: isMessageSent
+                  ? sentMessageColor.withOpacity(0.6)
+                  : receivedMessageColor.withOpacity(0.6),
+              trimMode: TrimMode.Length,
+              trimCollapsedText: 'Show more',
+              trimExpandedText: 'Show less',
+              style: TextStyle(
+                fontStyle: isDeleted ? FontStyle.italic : FontStyle.normal,
+                color: isMessageSent ? sentMessageColor : receivedMessageColor,
               ),
+            ),
+            MelosChat.instance.melosChatOptions.chatRoomThemeData!.showTimestamp
+                ? Text(
+                    DateFormat('jm')
+                        .format(DateTime.parse(timestamp!).toLocal()),
+                    textAlign: TextAlign.end,
+                    style: TextStyle(
+                      color: isMessageSent
+                          ? sentMessageColor.withOpacity(0.7)
+                          : receivedMessageColor.withOpacity(0.7),
+                      fontSize: 11,
+                    ),
+                  )
+                : Container(),
+          ],
+        ),
       ),
     ),
   );

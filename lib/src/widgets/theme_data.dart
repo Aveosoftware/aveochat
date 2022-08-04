@@ -8,6 +8,7 @@ class ChatRoomThemeData {
   final Color? sentMessageTileColor;
   final Color? receivedMessageTileColor;
   final Color? backgroundColor;
+  final bool showTimestamp;
 
   const ChatRoomThemeData({
     this.messageHint = 'Message',
@@ -19,6 +20,7 @@ class ChatRoomThemeData {
     this.sentMessageTileColor,
     this.receivedMessageTileColor,
     this.backgroundColor,
+    this.showTimestamp = true,
   });
 }
 

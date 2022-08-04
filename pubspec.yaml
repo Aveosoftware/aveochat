@@ -13,6 +13,7 @@ dependencies:
   firebase_core: ^1.19.1
   cloud_firestore: ^3.2.1
   readmore: ^2.2.0
+  intl: ^0.17.0
   firebase_chat:
     path: lib/src/firebase_chat
 
