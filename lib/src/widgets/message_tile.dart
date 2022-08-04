@@ -1,6 +1,6 @@
 part of '../../melos_chat.dart';
 
-Widget MessageTile(
+Widget MessageBubble(
   BuildContext context, {
   required String message,
   required bool isMessageSent,
@@ -35,17 +35,31 @@ Widget MessageTile(
           ),
         ),
         padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
-        child: Text(
-          isDeleted
-              ? isMessageSent
-                  ? "🚫 You deleted this message"
-                  : "🚫 This message was deleted"
-              : message,
-          style: TextStyle(
-            fontStyle: isDeleted ? FontStyle.italic : FontStyle.normal,
-            color: isMessageSent ? sentMessageColor : receivedMessageColor,
-          ),
-        ),
+        child: isDeleted
+            ? Text(
+                isMessageSent
+                    ? "🚫 You deleted this message"
+                    : "🚫 This message was deleted",
+                style: TextStyle(
+                  fontStyle: isDeleted ? FontStyle.italic : FontStyle.normal,
+                  color:
+                      isMessageSent ? sentMessageColor : receivedMessageColor,
+                ),
+              )
+            : ReadMoreText(
+                message,
+                colorClickableText: isMessageSent
+                    ? sentMessageColor.withOpacity(0.6)
+                    : receivedMessageColor.withOpacity(0.6),
+                trimMode: TrimMode.Length,
+                trimCollapsedText: 'Show more',
+                trimExpandedText: 'Show less',
+                style: TextStyle(
+                  fontStyle: isDeleted ? FontStyle.italic : FontStyle.normal,
+                  color:
+                      isMessageSent ? sentMessageColor : receivedMessageColor,
+                ),
+              ),
       ),
     ),
   );

@@ -88,7 +88,7 @@ class _ChatRoomState extends State<ChatRoom> {
                     reverse: true,
                     itemCount: snapshot.data?.length,
                     itemBuilder: (context, index) {
-                      return MessageTile(
+                      return MessageBubble(
                         context,
                         isSelected:
                             selectionList.contains(snapshot.data![index].msgId),
