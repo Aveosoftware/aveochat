@@ -173,7 +173,8 @@ class _ChatRoomState extends State<ChatRoom> {
             minLeadingWidth: 0,
             title: TextFormField(
               controller: messageController,
-              maxLines: null,
+              minLines: 1,
+              maxLines: 6,
               decoration: InputDecoration(
                 hintText: MelosChat
                     .instance.melosChatOptions.chatRoomThemeData!.messageHint,
