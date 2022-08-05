@@ -13,7 +13,7 @@ class ChatShimmer extends StatelessWidget {
         child: Column(
           children: [
             ...List.generate(
-              7,
+              16,
               (index) => ListTile(
                 leading: Shimmer.fromColors(
                   baseColor: Colors.grey[300]!,
