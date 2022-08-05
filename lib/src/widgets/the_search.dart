@@ -1,3 +1,4 @@
+import 'package:firebase_chat/firebase_chat.dart';
 import 'package:flutter/material.dart';
 import 'package:melos_chat/melos_chat.dart';
 
@@ -57,9 +58,9 @@ class TheSearch extends SearchDelegate<String> {
                         ChatRoomModel chatRoom = await MelosChat
                             .instance.firebaseChatService
                             .startNewChatRoom(
-                                currentUser: MelosChat.instance.user,
-                                otherUser: snapshot.data[index]);
-                        close(context, '');
+                          currentUser: MelosChat.instance.user,
+                          otherUser: snapshot.data[index],
+                        );
                         Navigator.of(context).push(MaterialPageRoute(
                           builder: (context) => ChatRoom(
                             chat: chatRoom,

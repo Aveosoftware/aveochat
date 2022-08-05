@@ -10,11 +10,23 @@ class MelosChatScreen extends StatefulWidget {
 
 class _MelosChatScreenState extends State<MelosChatScreen> {
   late Stream<List<ChatRoomModel>> chatsStream;
+  TextEditingController searchController = TextEditingController();
   @override
   void initState() {
-    chatsStream = MelosChat.instance.firebaseChatService
-        .getChatsStreamByUserId(uniqueUserId: MelosChat.instance.user.userId);
+    loadStream();
+    searchController.addListener(() {
+      loadStream();
+      searchController.selection = TextSelection.fromPosition(
+          TextPosition(offset: searchController.text.length));
+      setState(() {});
+    });
     super.initState();
+  }
+
+  loadStream() {
+    chatsStream = MelosChat.instance.firebaseChatService.getChatsStreamByUserId(
+        uniqueUserId: MelosChat.instance.user.userId,
+        search: searchController.text.trim());
   }
 
   @override
@@ -30,6 +42,10 @@ class _MelosChatScreenState extends State<MelosChatScreen> {
             children: [
               SearchBox(
                 context,
+                searchController,
+                clearSearch: () {
+                  searchController.text = '';
+                },
                 allowUserSearch:
                     MelosChat.instance.melosChatOptions.allowUserSearch,
                 searchHint: MelosChat.instance.melosChatOptions.searchHint,
@@ -40,13 +56,12 @@ class _MelosChatScreenState extends State<MelosChatScreen> {
                     (context, AsyncSnapshot<List<ChatRoomModel>> snapshot) {
                   // WHEN LOADING
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      heightFactor: 8,
-                      child: CircularProgressIndicator(),
+                    return Center(
+                      child: ChatShimmer(context: context),
                     );
                   }
                   // WHEN DATA IS LOADED
-                  if (snapshot.hasData) {
+                  if (snapshot.hasData && snapshot.data!.isNotEmpty) {
                     return ListView.builder(
                       itemCount: snapshot.data!.length,
                       shrinkWrap: true,
@@ -67,10 +82,77 @@ class _MelosChatScreenState extends State<MelosChatScreen> {
                       },
                     );
                   }
+
+                  if (snapshot.hasData &&
+                      snapshot.data!.isEmpty &&
+                      searchController.text.isEmpty)
                   // IF NO DATA IS AVAILABLE
-                  return const Center(
-                    heightFactor: 8,
-                    child: Text("Search for people & get started chatting."),
+                  {
+                    return const Center(
+                      heightFactor: 8,
+                      child: Text("Search for people & get started chatting."),
+                    );
+                  }
+
+                  return FutureBuilder(
+                    future: MelosChat.instance.firebaseChatService
+                        .findUsersBySearchQuery(
+                            query: searchController.text.trim(),
+                            user: MelosChat.instance.user),
+                    builder: (context, AsyncSnapshot snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        if (searchController.text.trim().isNotEmpty) {
+                          if (snapshot.data.isEmpty) {
+                            return const Center(
+                              child: Text("No user found."),
+                            );
+                          }
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.all(16.0),
+                                child: Text(
+                                  'Other Contacts',
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                              ),
+                              ...List.generate(
+                                snapshot.data.length,
+                                (index) => ListTile(
+                                  onTap: () async {
+                                    try {
+                                      ChatRoomModel chatRoom = await MelosChat
+                                          .instance.firebaseChatService
+                                          .startNewChatRoom(
+                                              currentUser:
+                                                  MelosChat.instance.user,
+                                              otherUser: snapshot.data[index]);
+                                      searchController.text = '';
+                                      Navigator.of(context)
+                                          .push(MaterialPageRoute(
+                                        builder: (context) => ChatRoom(
+                                          chat: chatRoom,
+                                        ),
+                                      ));
+                                    } catch (e, s) {
+                                      print(s);
+                                    }
+                                  },
+                                  title: Text(snapshot.data[index].displayName),
+                                ),
+                              ).toList()
+                            ],
+                          );
+                        } else {
+                          return Container();
+                        }
+                      }
+                      return Center(
+                          child: ChatShimmer(
+                        context: context,
+                      ));
+                    },
                   );
                 },
               ),

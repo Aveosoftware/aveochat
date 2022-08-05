@@ -13,7 +13,7 @@ abstract class FirebaseChatService {
 
   /// Get all the chats for provided unique userId.
   Stream<List<ChatRoomModel>> getChatsStreamByUserId(
-      {required String uniqueUserId});
+      {required String search, required String uniqueUserId});
 
   /// Get all the conversation between you and other person, using chatId.
   Future<List<Message>> getConversationByChatId(

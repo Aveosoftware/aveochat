@@ -5,7 +5,7 @@ import 'package:firebase_chat/firebase_chat.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:melos_chat/src/widgets/chat_room.dart';
-import 'package:melos_chat/src/widgets/the_search.dart';
+import 'package:melos_chat/src/widgets/chat_shimmer.dart';
 import 'package:readmore/readmore.dart';
 
 export 'package:firebase_chat/firebase_chat.dart';

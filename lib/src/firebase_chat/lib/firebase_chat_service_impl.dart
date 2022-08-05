@@ -27,7 +27,7 @@ class FirebaseChatServiceImpl extends FirebaseChatService {
 
   @override
   Stream<List<ChatRoomModel>> getChatsStreamByUserId(
-      {required String uniqueUserId}) async* {
+      {required String search, required String uniqueUserId}) async* {
     StreamController<List<ChatRoomModel>> stream =
         StreamController<List<ChatRoomModel>>();
     List<ChatRoomModel> chats = [];
@@ -45,7 +45,12 @@ class FirebaseChatServiceImpl extends FirebaseChatService {
           for (String chat in event!.chats!) {
             var data =
                 await db.collection(Collections.CHATROOMS).doc(chat).get();
-            chats.add(ChatRoomModel.fromMap(data.data()!));
+            var chatRoom = ChatRoomModel.fromMap(data.data()!);
+            if (chatRoom.participants.firstWhereOrNull((element) => element
+                    .displayName
+                    .toLowerCase()
+                    .contains(search.toLowerCase())) !=
+                null) chats.add(chatRoom);
           }
           stream.add(chats);
         }

@@ -1,3 +1,4 @@
+import 'package:firebase_chat/firebase_chat.dart';
 import 'package:flutter/material.dart';
 import 'package:melos_chat/melos_chat.dart';
 
