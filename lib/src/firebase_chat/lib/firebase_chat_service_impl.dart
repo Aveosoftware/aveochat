@@ -118,16 +118,27 @@ class FirebaseChatServiceImpl extends FirebaseChatService {
   }
 
   @override
-  Stream<List<Message>> getConversationStreamByChatId(
-      {required String chatId, bool descending = false}) async* {
+  Stream<List<Message>> getConversationStreamByChatIdForUserId({
+    required String chatId,
+    required String userId,
+    bool descending = false,
+  }) async* {
     yield* db
         .collection(Collections.CHATROOMS)
         .doc(chatId)
         .collection(Collections.CONVERSATIONS)
         .orderBy("timestamp", descending: descending)
         .snapshots()
-        .map((querySnapshot) =>
-            querySnapshot.docs.map((e) => Message.fromMap(e.data())).toList());
+        .map((querySnapshot) {
+      // readTheMessages(chatId, userId);
+      return querySnapshot.docs.map((e) {
+        if (Message.fromMap(e.data()).sentBy == userId &&
+            Message.fromMap(e.data()).readStatus == ReadStatus.DELIVERED) {
+          e.reference.update({'readStatus': ReadStatus.READ});
+        }
+        return Message.fromMap(e.data());
+      }).toList();
+    });
   }
 
   @override

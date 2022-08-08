@@ -13,6 +13,7 @@ Widget MessageBubble(
   String? timestamp,
   bool isSelected = false,
   required bool isDeleted,
+  required int readStatus,
 }) {
   return ListTile(
     tileColor: isSelected ? Colors.grey[400] : null,
@@ -58,19 +59,53 @@ Widget MessageBubble(
                 color: isMessageSent ? sentMessageColor : receivedMessageColor,
               ),
             ),
-            MelosChat.instance.melosChatOptions.chatRoomThemeData!.showTimestamp
-                ? Text(
-                    DateFormat('jm')
-                        .format(DateTime.parse(timestamp!).toLocal()),
-                    textAlign: TextAlign.end,
-                    style: TextStyle(
-                      color: isMessageSent
-                          ? sentMessageColor.withOpacity(0.7)
-                          : receivedMessageColor.withOpacity(0.7),
-                      fontSize: 11,
-                    ),
-                  )
-                : Container(),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                MelosChat.instance.melosChatOptions.chatRoomThemeData!
+                        .showTimestamp
+                    ? Text(
+                        DateFormat('jm')
+                            .format(DateTime.parse(timestamp!).toLocal()),
+                        textAlign: TextAlign.end,
+                        style: TextStyle(
+                          color: isMessageSent
+                              ? sentMessageColor.withOpacity(0.7)
+                              : receivedMessageColor.withOpacity(0.7),
+                          fontSize: 11,
+                        ),
+                      )
+                    : Container(),
+                MelosChat.instance.melosChatOptions.chatRoomThemeData!
+                        .enableReadReciepts
+                    ? isMessageSent
+                        ? const SizedBox(
+                            width: 8.0,
+                          )
+                        : Container()
+                    : Container(),
+                MelosChat.instance.melosChatOptions.chatRoomThemeData!
+                        .enableReadReciepts
+                    ? isMessageSent
+                        ? readStatus == ReadStatus.READ
+                            ? Icon(
+                                Icons.done_all,
+                                size: 12,
+                                color: isMessageSent
+                                    ? sentMessageColor.withOpacity(0.9)
+                                    : receivedMessageColor.withOpacity(0.9),
+                              )
+                            : Icon(
+                                Icons.done,
+                                size: 12,
+                                color: isMessageSent
+                                    ? sentMessageColor.withOpacity(0.9)
+                                    : receivedMessageColor.withOpacity(0.9),
+                              )
+                        : Container()
+                    : Container(),
+              ],
+            ),
           ],
         ),
       ),

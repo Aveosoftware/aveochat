@@ -1,4 +1,3 @@
-import 'package:firebase_chat/firebase_chat.dart';
 import 'package:flutter/material.dart';
 import 'package:melos_chat/melos_chat.dart';
 
@@ -24,8 +23,13 @@ class _ChatRoomState extends State<ChatRoom> {
   @override
   void initState() {
     conversationStream = MelosChat.instance.firebaseChatService
-        .getConversationStreamByChatId(
-            chatId: widget.chat.chatId, descending: true);
+        .getConversationStreamByChatIdForUserId(
+            userId: widget.chat.participants
+                .firstWhere((element) =>
+                    element.userId != MelosChat.instance.user.userId)
+                .userId,
+            chatId: widget.chat.chatId,
+            descending: true);
     super.initState();
   }
 
@@ -91,6 +95,7 @@ class _ChatRoomState extends State<ChatRoom> {
                     itemBuilder: (context, index) {
                       return MessageBubble(
                         context,
+                        readStatus: snapshot.data![index].readStatus,
                         isSelected:
                             selectionList.contains(snapshot.data![index].msgId),
                         isDeleted: snapshot.data![index].isDeleted,

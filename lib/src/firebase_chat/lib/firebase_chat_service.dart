@@ -20,8 +20,11 @@ abstract class FirebaseChatService {
       {required String chatId, bool descending = false});
 
   /// Stream all the conversation between you and other person, using chatId.
-  Stream<List<Message>> getConversationStreamByChatId(
-      {required String chatId, bool descending = false});
+  Stream<List<Message>> getConversationStreamByChatIdForUserId({
+    required String chatId,
+    required String userId,
+    bool descending = false,
+  });
 
   /// Send a message to a chat.
   Future sendMessageByChatId(

@@ -6,6 +6,7 @@ class Message {
   String sentBy;
   String timestamp;
   bool isDeleted;
+  int readStatus;
 
   Message({
     this.msgId = '',
@@ -13,6 +14,7 @@ class Message {
     required this.sentBy,
     required this.timestamp,
     this.isDeleted = false,
+    this.readStatus = ReadStatus.DELIVERED,
   });
 
   Map<String, dynamic> toMap() {
@@ -22,6 +24,7 @@ class Message {
       'sent_by': sentBy,
       'timestamp': timestamp,
       'isDeleted': isDeleted,
+      'readStatus': readStatus,
     };
   }
 
@@ -32,6 +35,7 @@ class Message {
       sentBy: map['sent_by'] as String,
       timestamp: map['timestamp'] as String,
       isDeleted: map['isDeleted'] as bool,
+      readStatus: map['readStatus'] as int,
     );
   }
 }

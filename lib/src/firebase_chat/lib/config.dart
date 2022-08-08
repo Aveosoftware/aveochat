@@ -7,6 +7,12 @@ class Collections {
   static const CONVERSATIONS = 'conversation';
 }
 
+class ReadStatus {
+  static const SENT = -1;
+  static const DELIVERED = 0;
+  static const READ = 1;
+}
+
 extension StringCasingExtension on String {
   String toCapitalized() =>
       length > 0 ? '${this[0].toUpperCase()}${substring(1).toLowerCase()}' : '';

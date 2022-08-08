@@ -18,7 +18,6 @@ class _MelosChatScreenState extends State<MelosChatScreen> {
       loadStream();
       searchController.selection = TextSelection.fromPosition(
           TextPosition(offset: searchController.text.length));
-      setState(() {});
     });
     super.initState();
   }
@@ -27,6 +26,7 @@ class _MelosChatScreenState extends State<MelosChatScreen> {
     chatsStream = MelosChat.instance.firebaseChatService.getChatsStreamByUserId(
         uniqueUserId: MelosChat.instance.user.userId,
         search: searchController.text.trim());
+    setState(() {});
   }
 
   @override
@@ -129,12 +129,15 @@ class _MelosChatScreenState extends State<MelosChatScreen> {
                                                   MelosChat.instance.user,
                                               otherUser: snapshot.data[index]);
                                       searchController.text = '';
-                                      Navigator.of(context)
-                                          .push(MaterialPageRoute(
-                                        builder: (context) => ChatRoom(
-                                          chat: chatRoom,
-                                        ),
-                                      ));
+                                      WidgetsBinding.instance
+                                          .addPostFrameCallback((_) {
+                                        Navigator.of(context)
+                                            .push(MaterialPageRoute(
+                                          builder: (context) => ChatRoom(
+                                            chat: chatRoom,
+                                          ),
+                                        ));
+                                      });
                                     } catch (e, s) {
                                       print(s);
                                     }
