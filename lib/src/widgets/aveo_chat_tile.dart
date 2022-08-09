@@ -1,6 +1,6 @@
 part of '../../melos_chat.dart';
 
-Widget MelosChatTile(
+Widget ChatTile(
   context, {
   required String chatName,
   Color? chatTileColor,

@@ -1,14 +1,13 @@
 part of '../../melos_chat.dart';
 
-class MelosChatScreen extends StatefulWidget {
-  const MelosChatScreen({Key? key, required BuildContext context})
-      : super(key: key);
+class AveoChat extends StatefulWidget {
+  const AveoChat({Key? key, required BuildContext context}) : super(key: key);
 
   @override
-  State<MelosChatScreen> createState() => _MelosChatScreenState();
+  State<AveoChat> createState() => _AveoChatState();
 }
 
-class _MelosChatScreenState extends State<MelosChatScreen> {
+class _AveoChatState extends State<AveoChat> {
   late Stream<List<ChatRoomModel>> chatsStream;
   TextEditingController searchController = TextEditingController();
   @override
@@ -67,7 +66,7 @@ class _MelosChatScreenState extends State<MelosChatScreen> {
                       shrinkWrap: true,
                       primary: false,
                       itemBuilder: (context, index) {
-                        return MelosChatTile(
+                        return ChatTile(
                           context,
                           chatName: MelosChat.instance.firebaseChatService
                               .getChatRoomName(
