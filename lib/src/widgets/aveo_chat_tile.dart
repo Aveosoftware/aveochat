@@ -11,6 +11,7 @@ Widget ChatTile(
       .getChatRoomName(chat: chat, thisUserId: MelosChat.instance.user.userId);
   return ListTile(
     onTap: () {
+      FocusManager.instance.primaryFocus!.unfocus();
       Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => ChatRoom(
           chat: chat,

@@ -128,15 +128,14 @@ class _AveoChatState extends State<AveoChat> {
                                                   MelosChat.instance.user,
                                               otherUser: snapshot.data[index]);
                                       searchController.text = '';
-                                      WidgetsBinding.instance
-                                          .addPostFrameCallback((_) {
+                                      if (mounted) {
                                         Navigator.of(context)
                                             .push(MaterialPageRoute(
                                           builder: (context) => ChatRoom(
                                             chat: chatRoom,
                                           ),
                                         ));
-                                      });
+                                      }
                                     } catch (e, s) {
                                       print(s);
                                     }
