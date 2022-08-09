@@ -1,4 +1,7 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:melos_chat/melos_chat.dart';
 
 class ChatRoom extends StatefulWidget {
@@ -17,7 +20,7 @@ class _ChatRoomState extends State<ChatRoom> {
   late List<Message> conversation = [];
   TextEditingController messageController = TextEditingController();
 
-  List<String> selectionList = [];
+  List<Message> selectionList = [];
   bool hasSelectionStarted = false;
 
   @override
@@ -36,8 +39,31 @@ class _ChatRoomState extends State<ChatRoom> {
   deleteSelection() async {
     await MelosChat.instance.firebaseChatService.deleteConversation(
       chatId: widget.chat.chatId,
-      selectedMessageIds: selectionList,
+      selectedMessageIds: selectionList.map((e) => e.msgId).toList(),
     );
+    clearSelection();
+  }
+
+  copySelection() async {
+    if (selectionList.length == 1) {
+      Clipboard.setData(ClipboardData(text: selectionList.first.message));
+      return;
+    }
+    selectionList.sort(
+      (a, b) => DateTime.parse(a.timestamp)
+          .millisecondsSinceEpoch
+          .compareTo(DateTime.parse(b.timestamp).millisecondsSinceEpoch),
+    );
+    String copyData = '';
+    for (var obj in selectionList) {
+      copyData =
+          "$copyData[${DateFormat('d/M, h:m a').format(DateTime.parse(obj.timestamp).toLocal())}] ${obj.message}\n";
+    }
+    Clipboard.setData(ClipboardData(text: copyData));
+    clearSelection();
+  }
+
+  clearSelection() {
     hasSelectionStarted = false;
     setState(() {});
     selectionList.clear();
@@ -68,6 +94,17 @@ class _ChatRoomState extends State<ChatRoom> {
                       ),
                     )
                   : Container()
+              : Container(),
+          hasSelectionStarted
+              ? IconButton(
+                  onPressed: () async {
+                    await copySelection();
+                  },
+                  icon: const Icon(
+                    Icons.copy,
+                    color: Colors.white,
+                  ),
+                )
               : Container()
         ],
       ),
@@ -96,8 +133,9 @@ class _ChatRoomState extends State<ChatRoom> {
                       return MessageBubble(
                         context,
                         readStatus: snapshot.data![index].readStatus,
-                        isSelected:
-                            selectionList.contains(snapshot.data![index].msgId),
+                        isSelected: selectionList.firstWhereOrNull((element) =>
+                                element.msgId == snapshot.data![index].msgId) !=
+                            null,
                         isDeleted: snapshot.data![index].isDeleted,
                         message: snapshot.data![index].message,
                         isMessageSent: snapshot.data![index].sentBy ==
@@ -125,27 +163,31 @@ class _ChatRoomState extends State<ChatRoom> {
                                 ?.sentMessageTileColor ??
                             Theme.of(context).primaryColor,
                         onLongPress: () {
-                          if (!hasSelectionStarted) {
+                          if (!hasSelectionStarted &&
+                              !snapshot.data![index].isDeleted) {
                             if (snapshot.data![index].sentBy ==
                                 MelosChat.instance.user.userId) {
-                              selectionList.add(snapshot.data![index].msgId);
+                              selectionList.add(snapshot.data![index]);
                               hasSelectionStarted = true;
                               setState(() {});
                             }
                           }
                         },
                         onTap: () {
-                          if (hasSelectionStarted) {
-                            if (selectionList
-                                .contains(snapshot.data![index].msgId)) {
-                              selectionList.remove(snapshot.data![index].msgId);
+                          if (hasSelectionStarted &&
+                              !snapshot.data![index].isDeleted) {
+                            if (selectionList.firstWhereOrNull((element) =>
+                                    element.msgId ==
+                                    snapshot.data![index].msgId) !=
+                                null) {
+                              selectionList.remove(snapshot.data![index]);
                               if (selectionList.isEmpty) {
                                 hasSelectionStarted = false;
                               }
                             } else {
                               if (snapshot.data![index].sentBy ==
                                   MelosChat.instance.user.userId) {
-                                selectionList.add(snapshot.data![index].msgId);
+                                selectionList.add(snapshot.data![index]);
                               }
                             }
                             setState(() {});
