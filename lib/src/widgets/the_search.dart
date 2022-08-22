@@ -1,10 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:melos_chat/aveochat.dart';
-import 'package:melos_chat/src/firebase_repo/firebase_chat.dart';
-
-import 'chat_room.dart';
-
-class TheSearch extends SearchDelegate<String> {
+import 'package:aveochat/aveochat.dart';
+import 'package:flutter/materialhDelegate<String> {
   @override
   List<Widget>? buildActions(BuildContext context) {
     return [

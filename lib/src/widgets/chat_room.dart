@@ -1,9 +1,8 @@
+import 'package:aveochat/aveochat.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:melos_chat/aveochat.dart';
-import 'package:melos_chat/src/firebase_repo/firebase_chat.dart';
 
 class ChatRoom extends StatefulWidget {
   final ChatRoomModel chat;

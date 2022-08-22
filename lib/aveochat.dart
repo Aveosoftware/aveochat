@@ -2,13 +2,13 @@ library aveochat;
 
 import 'dart:async';
 
+import 'package:aveochat/src/widgets/chat_room.dart';
+import 'package:aveochat/src/widgets/chat_shimmer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:melos_chat/src/widgets/chat_room.dart';
-import 'package:melos_chat/src/widgets/chat_shimmer.dart';
 import 'package:readmore/readmore.dart';
 
 part 'src/chat_configs.dart';
