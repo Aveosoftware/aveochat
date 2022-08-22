@@ -1,5 +1,9 @@
 import 'package:aveochat/aveochat.dart';
-import 'package:flutter/materialhDelegate<String> {
+import 'package:flutter/material.dart';
+
+import 'chat_room.dart';
+
+class TheSearch extends SearchDelegate<String> {
   @override
   List<Widget>? buildActions(BuildContext context) {
     return [
