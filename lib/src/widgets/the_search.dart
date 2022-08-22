@@ -1,6 +1,6 @@
-import 'package:firebase_chat/firebase_chat.dart';
 import 'package:flutter/material.dart';
-import 'package:melos_chat/melos_chat.dart';
+import 'package:melos_chat/aveochat.dart';
+import 'package:melos_chat/src/firebase_repo/firebase_chat.dart';
 
 import 'chat_room.dart';
 

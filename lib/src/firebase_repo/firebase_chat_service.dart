@@ -1,4 +1,4 @@
-part of 'firebase_chat.dart';
+part of '../../../aveochat.dart';
 
 abstract class FirebaseChatService {
   /// Access the FirestoreFirebase instance as db. (Similar to FirebaseFirestore.instance)

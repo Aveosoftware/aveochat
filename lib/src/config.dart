@@ -1,4 +1,4 @@
-part of 'firebase_chat.dart';
+part of '../aveochat.dart';
 
 // List of Collections that are being used in Firebase Service.
 class Collections {

@@ -15,8 +15,6 @@ dependencies:
   readmore: ^2.2.0
   intl: ^0.17.0
   shimmer: ^2.0.0
-  firebase_chat:
-    path: lib/src/firebase_chat
 
 dev_dependencies:
   flutter_test:

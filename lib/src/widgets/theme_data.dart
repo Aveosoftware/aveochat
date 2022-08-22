@@ -1,4 +1,4 @@
-part of '../../melos_chat.dart';
+part of '../../aveochat.dart';
 
 class ChatRoomThemeData {
   final String messageHint;

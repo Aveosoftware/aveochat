@@ -1,4 +1,4 @@
-part of '../../melos_chat.dart';
+part of '../../aveochat.dart';
 
 class AveoChat extends StatefulWidget {
   const AveoChat({Key? key, required BuildContext context}) : super(key: key);

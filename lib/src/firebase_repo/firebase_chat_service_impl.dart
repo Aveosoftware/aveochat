@@ -1,4 +1,4 @@
-part of 'firebase_chat.dart';
+part of '../../../aveochat.dart';
 
 class FirebaseChatServiceImpl extends FirebaseChatService {
   FirebaseChatServiceImpl(super.db);

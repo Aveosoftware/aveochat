@@ -1,4 +1,4 @@
-part of '../firebase_chat.dart';
+part of '../../../aveochat.dart';
 
 class MelosUser {
   String userId;

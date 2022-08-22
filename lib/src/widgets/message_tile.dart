@@ -1,4 +1,4 @@
-part of '../../melos_chat.dart';
+part of '../../aveochat.dart';
 
 Widget MessageBubble(
   BuildContext context, {
