@@ -1,5 +1,5 @@
-name: melos_chat
-description: A new Flutter project.
+name: aveochat
+description: Chatting module developed by AveoSoftware.
 version: 0.0.1
 homepage:
 
@@ -12,8 +12,9 @@ dependencies:
     sdk: flutter
   firebase_core: ^1.19.1
   cloud_firestore: ^3.2.1
-  firebase_chat:
-    path: lib/src/firebase_chat
+  readmore: ^2.2.0
+  intl: ^0.17.0
+  shimmer: ^2.0.0
 
 dev_dependencies:
   flutter_test:

@@ -1,4 +1,4 @@
-part of 'firebase_chat.dart';
+part of '../../../aveochat.dart';
 
 class FirebaseChatServiceImpl extends FirebaseChatService {
   FirebaseChatServiceImpl(super.db);
@@ -27,7 +27,7 @@ class FirebaseChatServiceImpl extends FirebaseChatService {
 
   @override
   Stream<List<ChatRoomModel>> getChatsStreamByUserId(
-      {required String uniqueUserId}) async* {
+      {required String search, required String uniqueUserId}) async* {
     StreamController<List<ChatRoomModel>> stream =
         StreamController<List<ChatRoomModel>>();
     List<ChatRoomModel> chats = [];
@@ -45,7 +45,12 @@ class FirebaseChatServiceImpl extends FirebaseChatService {
           for (String chat in event!.chats!) {
             var data =
                 await db.collection(Collections.CHATROOMS).doc(chat).get();
-            chats.add(ChatRoomModel.fromMap(data.data()!));
+            var chatRoom = ChatRoomModel.fromMap(data.data()!);
+            if (chatRoom.participants.firstWhereOrNull((element) => element
+                    .displayName
+                    .toLowerCase()
+                    .contains(search.toLowerCase())) !=
+                null) chats.add(chatRoom);
           }
           stream.add(chats);
         }
@@ -90,6 +95,7 @@ class FirebaseChatServiceImpl extends FirebaseChatService {
           .doc(chatId)
           .collection(Collections.CONVERSATIONS)
           .add(message.toMap());
+      await doc.update({'msgId': doc.id});
     } on Exception catch (e, s) {
       if (kDebugMode) {
         print(s);
@@ -112,16 +118,27 @@ class FirebaseChatServiceImpl extends FirebaseChatService {
   }
 
   @override
-  Stream<List<Message>> getConversationStreamByChatId(
-      {required String chatId, bool descending = false}) async* {
+  Stream<List<Message>> getConversationStreamByChatIdForUserId({
+    required String chatId,
+    required String userId,
+    bool descending = false,
+  }) async* {
     yield* db
         .collection(Collections.CHATROOMS)
         .doc(chatId)
         .collection(Collections.CONVERSATIONS)
         .orderBy("timestamp", descending: descending)
         .snapshots()
-        .map((querySnapshot) =>
-            querySnapshot.docs.map((e) => Message.fromMap(e.data())).toList());
+        .map((querySnapshot) {
+      // readTheMessages(chatId, userId);
+      return querySnapshot.docs.map((e) {
+        if (Message.fromMap(e.data()).sentBy == userId &&
+            Message.fromMap(e.data()).readStatus == ReadStatus.DELIVERED) {
+          e.reference.update({'readStatus': ReadStatus.READ});
+        }
+        return Message.fromMap(e.data());
+      }).toList();
+    });
   }
 
   @override
@@ -140,6 +157,25 @@ class FirebaseChatServiceImpl extends FirebaseChatService {
       {required MelosUser currentUser, required MelosUser otherUser}) async {
     late ChatRoomModel newCreatedChat;
     try {
+      MelosUser myUser = MelosUser.fromMap(
+          (await db.collection(Collections.USERS).doc(currentUser.userId).get())
+              .data()!);
+      if (myUser.chats != null && myUser.chats!.isNotEmpty) {
+        for (var chatRoomId in myUser.chats!) {
+          ChatRoomModel snap = ChatRoomModel.fromMap(
+              (await db.collection(Collections.CHATROOMS).doc(chatRoomId).get())
+                  .data()!);
+          List<MelosUser?>? users = snap.participants;
+          if (snap.participants.length == 2 &&
+              users.firstWhereOrNull(
+                      (element) => element!.userId == otherUser.userId) !=
+                  null) {
+            newCreatedChat = snap;
+            return newCreatedChat;
+          }
+        }
+      }
+
       var docRef = await db.collection(Collections.CHATROOMS).add(
             ChatRoomModel(
                     chatId: "",
@@ -193,5 +229,25 @@ class FirebaseChatServiceImpl extends FirebaseChatService {
       print(s);
     }
     return suggestions;
+  }
+
+  @override
+  Future<bool> deleteConversation({
+    required String chatId,
+    required List<String> selectedMessageIds,
+  }) async {
+    try {
+      for (String id in selectedMessageIds) {
+        await db
+            .collection(Collections.CHATROOMS)
+            .doc(chatId)
+            .collection(Collections.CONVERSATIONS)
+            .doc(id)
+            .update({'isDeleted': true});
+      }
+    } catch (e) {
+      return false;
+    }
+    return true;
   }
 }

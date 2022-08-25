@@ -1,4 +1,4 @@
-part of 'firebase_chat.dart';
+part of '../../../aveochat.dart';
 
 abstract class FirebaseChatService {
   /// Access the FirestoreFirebase instance as db. (Similar to FirebaseFirestore.instance)
@@ -13,15 +13,18 @@ abstract class FirebaseChatService {
 
   /// Get all the chats for provided unique userId.
   Stream<List<ChatRoomModel>> getChatsStreamByUserId(
-      {required String uniqueUserId});
+      {required String search, required String uniqueUserId});
 
   /// Get all the conversation between you and other person, using chatId.
   Future<List<Message>> getConversationByChatId(
       {required String chatId, bool descending = false});
 
   /// Stream all the conversation between you and other person, using chatId.
-  Stream<List<Message>> getConversationStreamByChatId(
-      {required String chatId, bool descending = false});
+  Stream<List<Message>> getConversationStreamByChatIdForUserId({
+    required String chatId,
+    required String userId,
+    bool descending = false,
+  });
 
   /// Send a message to a chat.
   Future sendMessageByChatId(
@@ -38,4 +41,8 @@ abstract class FirebaseChatService {
   /// [EXPERIMENTAL] Returns a list of Users by providing a search query.
   Future<List<MelosUser>> findUsersBySearchQuery(
       {required String query, required MelosUser user});
+
+  /// Delete the selected messages from the list of given chatId.
+  Future<bool> deleteConversation(
+      {required String chatId, required List<String> selectedMessageIds});
 }

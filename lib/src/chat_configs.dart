@@ -1,4 +1,4 @@
-part of '../melos_chat.dart';
+part of '../aveochat.dart';
 
 /// ChatServices
 ///
@@ -18,12 +18,20 @@ class MelosChat {
   late MelosUser user;
   late FirebaseChatService firebaseChatService;
 
+  // Customisations
+  late MelosChatOptions melosChatOptions;
+
   MelosChat.internal();
   static final MelosChat instance = MelosChat.internal();
 
-  factory MelosChat({required ChatServices service, required MelosUser user}) {
+  factory MelosChat({
+    required ChatServices service,
+    required MelosUser user,
+    MelosChatOptions melosChatOptions = const MelosChatOptions(),
+  }) {
     instance.chatService = service;
     instance.user = user;
+    instance.melosChatOptions = melosChatOptions;
     return instance;
   }
 

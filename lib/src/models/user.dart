@@ -1,4 +1,4 @@
-part of '../firebase_chat.dart';
+part of '../../../aveochat.dart';
 
 class MelosUser {
   String userId;
@@ -18,7 +18,7 @@ class MelosUser {
   Map<String, dynamic> toMap() {
     return {
       'userId': userId,
-      'displayName': displayName,
+      'displayName': displayName.toLowerCase(),
       'timestamp': timestamp,
       'chats': chats,
     };
@@ -33,7 +33,7 @@ class MelosUser {
     }
     return MelosUser(
       userId: map['userId'] as String,
-      displayName: map['displayName'] as String,
+      displayName: map['displayName'].toString().toTitleCase(),
       timestamp: map.containsKey('timestamp') ? map['timestamp'] as int : null,
       chats: chats,
     );
