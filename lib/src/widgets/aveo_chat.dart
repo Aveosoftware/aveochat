@@ -22,9 +22,10 @@ class _AveoChatState extends State<AveoChat> {
   }
 
   loadStream() {
-    chatsStream = MelosChat.instance.firebaseChatService.getChatsStreamByUserId(
-        uniqueUserId: MelosChat.instance.user.userId,
-        search: searchController.text.trim());
+    chatsStream = AveoChatConfig.instance.firebaseChatService
+        .getChatsStreamByUserId(
+            uniqueUserId: AveoChatConfig.instance.user.userId,
+            search: searchController.text.trim());
     setState(() {});
   }
 
@@ -32,7 +33,7 @@ class _AveoChatState extends State<AveoChat> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) => Container(
-        color: MelosChat.instance.melosChatOptions.backgroundColor,
+        color: AveoChatConfig.instance.aveoChatOptions.backgroundColor,
         constraints: BoxConstraints(minHeight: constraints.maxHeight),
         child: SingleChildScrollView(
           primary: true,
@@ -46,8 +47,8 @@ class _AveoChatState extends State<AveoChat> {
                   searchController.text = '';
                 },
                 allowUserSearch:
-                    MelosChat.instance.melosChatOptions.allowUserSearch,
-                searchHint: MelosChat.instance.melosChatOptions.searchHint,
+                    AveoChatConfig.instance.aveoChatOptions.allowUserSearch,
+                searchHint: AveoChatConfig.instance.aveoChatOptions.searchHint,
               ),
               StreamBuilder(
                 stream: chatsStream,
@@ -68,14 +69,15 @@ class _AveoChatState extends State<AveoChat> {
                       itemBuilder: (context, index) {
                         return ChatTile(
                           context,
-                          chatName: MelosChat.instance.firebaseChatService
+                          chatName: AveoChatConfig.instance.firebaseChatService
                               .getChatRoomName(
                                   chat: snapshot.data![index],
-                                  thisUserId: MelosChat.instance.user.userId),
-                          chatTileColor:
-                              MelosChat.instance.melosChatOptions.chatTileColor,
-                          avatarBackgroundColor: MelosChat
-                              .instance.melosChatOptions.avatarBackgroundColor,
+                                  thisUserId:
+                                      AveoChatConfig.instance.user.userId),
+                          chatTileColor: AveoChatConfig
+                              .instance.aveoChatOptions.chatTileColor,
+                          avatarBackgroundColor: AveoChatConfig
+                              .instance.aveoChatOptions.avatarBackgroundColor,
                           chat: snapshot.data![index],
                         );
                       },
@@ -94,10 +96,10 @@ class _AveoChatState extends State<AveoChat> {
                   }
 
                   return FutureBuilder(
-                    future: MelosChat.instance.firebaseChatService
+                    future: AveoChatConfig.instance.firebaseChatService
                         .findUsersBySearchQuery(
                             query: searchController.text.trim(),
-                            user: MelosChat.instance.user),
+                            user: AveoChatConfig.instance.user),
                     builder: (context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.done) {
                         if (searchController.text.trim().isNotEmpty) {
@@ -121,12 +123,14 @@ class _AveoChatState extends State<AveoChat> {
                                 (index) => ListTile(
                                   onTap: () async {
                                     try {
-                                      ChatRoomModel chatRoom = await MelosChat
-                                          .instance.firebaseChatService
-                                          .startNewChatRoom(
-                                              currentUser:
-                                                  MelosChat.instance.user,
-                                              otherUser: snapshot.data[index]);
+                                      ChatRoomModel chatRoom =
+                                          await AveoChatConfig
+                                              .instance.firebaseChatService
+                                              .startNewChatRoom(
+                                                  currentUser: AveoChatConfig
+                                                      .instance.user,
+                                                  otherUser:
+                                                      snapshot.data[index]);
                                       searchController.text = '';
                                       if (mounted) {
                                         Navigator.of(context)

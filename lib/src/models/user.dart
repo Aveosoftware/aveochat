@@ -1,12 +1,12 @@
 part of '../../../aveochat.dart';
 
-class MelosUser {
+class AveoUser {
   String userId;
   String displayName;
   int? timestamp;
   List<String>? chats;
 
-  MelosUser({
+  AveoUser({
     required this.userId,
     required this.displayName,
     this.timestamp,
@@ -24,14 +24,14 @@ class MelosUser {
     };
   }
 
-  factory MelosUser.fromMap(Map<String, dynamic> map) {
+  factory AveoUser.fromMap(Map<String, dynamic> map) {
     List<String> chats = [];
     if (map.containsKey('chats')) {
       for (var item in map['chats']) {
         chats.add(item.toString());
       }
     }
-    return MelosUser(
+    return AveoUser(
       userId: map['userId'] as String,
       displayName: map['displayName'].toString().toTitleCase(),
       timestamp: map.containsKey('timestamp') ? map['timestamp'] as int : null,

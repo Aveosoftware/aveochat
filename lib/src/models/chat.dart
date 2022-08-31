@@ -2,7 +2,7 @@ part of '../../../aveochat.dart';
 
 class ChatRoomModel {
   String chatId;
-  List<MelosUser> participants;
+  List<AveoUser> participants;
   String chatName;
 
   ChatRoomModel({
@@ -24,9 +24,9 @@ class ChatRoomModel {
   }
 
   factory ChatRoomModel.fromMap(Map<String, dynamic> map) {
-    List<MelosUser> participants = [];
+    List<AveoUser> participants = [];
     for (var item in map['participants']) {
-      participants.add(MelosUser.fromMap(item));
+      participants.add(AveoUser.fromMap(item));
     }
 
     return ChatRoomModel(

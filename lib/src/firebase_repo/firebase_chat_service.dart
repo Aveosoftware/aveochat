@@ -6,7 +6,7 @@ abstract class FirebaseChatService {
   FirebaseChatService(this.db);
 
   /// Create a user entry in firestore inside users collection.
-  Future createUser({required MelosUser user});
+  Future createUser({required AveoUser user});
 
   /// Get all the chats for provided unique userId.
   Future<List<ChatRoomModel>> getChatsByUserId({required String uniqueUserId});
@@ -36,11 +36,11 @@ abstract class FirebaseChatService {
 
   /// Start a new Chat from searched list.
   Future<ChatRoomModel> startNewChatRoom(
-      {required MelosUser currentUser, required MelosUser otherUser});
+      {required AveoUser currentUser, required AveoUser otherUser});
 
   /// [EXPERIMENTAL] Returns a list of Users by providing a search query.
-  Future<List<MelosUser>> findUsersBySearchQuery(
-      {required String query, required MelosUser user});
+  Future<List<AveoUser>> findUsersBySearchQuery(
+      {required String query, required AveoUser user});
 
   /// Delete the selected messages from the list of given chatId.
   Future<bool> deleteConversation(

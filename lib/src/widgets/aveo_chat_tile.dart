@@ -7,8 +7,8 @@ Widget ChatTile(
   Color? avatarBackgroundColor,
   required ChatRoomModel chat,
 }) {
-  String chatName = MelosChat.instance.firebaseChatService
-      .getChatRoomName(chat: chat, thisUserId: MelosChat.instance.user.userId);
+  String chatName = AveoChatConfig.instance.firebaseChatService.getChatRoomName(
+      chat: chat, thisUserId: AveoChatConfig.instance.user.userId);
   return ListTile(
     onTap: () {
       FocusManager.instance.primaryFocus!.unfocus();

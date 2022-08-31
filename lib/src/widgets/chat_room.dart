@@ -25,11 +25,11 @@ class _ChatRoomState extends State<ChatRoom> {
 
   @override
   void initState() {
-    conversationStream = MelosChat.instance.firebaseChatService
+    conversationStream = AveoChatConfig.instance.firebaseChatService
         .getConversationStreamByChatIdForUserId(
             userId: widget.chat.participants
                 .firstWhere((element) =>
-                    element.userId != MelosChat.instance.user.userId)
+                    element.userId != AveoChatConfig.instance.user.userId)
                 .userId,
             chatId: widget.chat.chatId,
             descending: true);
@@ -37,7 +37,7 @@ class _ChatRoomState extends State<ChatRoom> {
   }
 
   deleteSelection() async {
-    await MelosChat.instance.firebaseChatService.deleteConversation(
+    await AveoChatConfig.instance.firebaseChatService.deleteConversation(
       chatId: widget.chat.chatId,
       selectedMessageIds: selectionList.map((e) => e.msgId).toList(),
     );
@@ -73,16 +73,17 @@ class _ChatRoomState extends State<ChatRoom> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      backgroundColor: MelosChat
-              .instance.melosChatOptions.chatRoomThemeData?.backgroundColor ??
+      backgroundColor: AveoChatConfig
+              .instance.aveoChatOptions.chatRoomThemeData?.backgroundColor ??
           Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(
-          MelosChat.instance.firebaseChatService.getChatRoomName(
-              chat: widget.chat, thisUserId: MelosChat.instance.user.userId),
+          AveoChatConfig.instance.firebaseChatService.getChatRoomName(
+              chat: widget.chat,
+              thisUserId: AveoChatConfig.instance.user.userId),
         ),
         actions: [
-          MelosChat.instance.melosChatOptions.allowMessageDeletion
+          AveoChatConfig.instance.aveoChatOptions.allowMessageDeletion
               ? hasSelectionStarted
                   ? IconButton(
                       onPressed: () async {
@@ -139,26 +140,29 @@ class _ChatRoomState extends State<ChatRoom> {
                         isDeleted: snapshot.data![index].isDeleted,
                         message: snapshot.data![index].message,
                         isMessageSent: snapshot.data![index].sentBy ==
-                            MelosChat.instance.user.userId,
+                            AveoChatConfig.instance.user.userId,
                         timestamp: snapshot.data![index].timestamp,
-                        receivedMessageTileColor: MelosChat
+                        receivedMessageTileColor: AveoChatConfig
                                 .instance
-                                .melosChatOptions
+                                .aveoChatOptions
                                 .chatRoomThemeData
                                 ?.receivedMessageColor ??
                             Colors.blueGrey,
-                        receivedMessageColor: MelosChat
+                        receivedMessageColor: AveoChatConfig
                                 .instance
-                                .melosChatOptions
+                                .aveoChatOptions
                                 .chatRoomThemeData
                                 ?.receivedMessageColor ??
                             Colors.white,
-                        sentMessageColor: MelosChat.instance.melosChatOptions
-                                .chatRoomThemeData?.sentMessageColor ??
-                            Colors.white,
-                        sentMessageTileColor: MelosChat
+                        sentMessageColor: AveoChatConfig
                                 .instance
-                                .melosChatOptions
+                                .aveoChatOptions
+                                .chatRoomThemeData
+                                ?.sentMessageColor ??
+                            Colors.white,
+                        sentMessageTileColor: AveoChatConfig
+                                .instance
+                                .aveoChatOptions
                                 .chatRoomThemeData
                                 ?.sentMessageTileColor ??
                             Theme.of(context).primaryColor,
@@ -166,7 +170,7 @@ class _ChatRoomState extends State<ChatRoom> {
                           if (!hasSelectionStarted &&
                               !snapshot.data![index].isDeleted) {
                             if (snapshot.data![index].sentBy ==
-                                MelosChat.instance.user.userId) {
+                                AveoChatConfig.instance.user.userId) {
                               selectionList.add(snapshot.data![index]);
                               hasSelectionStarted = true;
                               setState(() {});
@@ -186,7 +190,7 @@ class _ChatRoomState extends State<ChatRoom> {
                               }
                             } else {
                               if (snapshot.data![index].sentBy ==
-                                  MelosChat.instance.user.userId) {
+                                  AveoChatConfig.instance.user.userId) {
                                 selectionList.add(snapshot.data![index]);
                               }
                             }
@@ -224,8 +228,8 @@ class _ChatRoomState extends State<ChatRoom> {
               minLines: 1,
               maxLines: 6,
               decoration: InputDecoration(
-                hintText: MelosChat
-                    .instance.melosChatOptions.chatRoomThemeData!.messageHint,
+                hintText: AveoChatConfig
+                    .instance.aveoChatOptions.chatRoomThemeData!.messageHint,
                 focusedBorder:
                     const OutlineInputBorder(borderSide: BorderSide.none),
                 enabledBorder:
@@ -233,19 +237,19 @@ class _ChatRoomState extends State<ChatRoom> {
               ),
             ),
             trailing: IconButton(
-              icon: MelosChat
-                  .instance.melosChatOptions.chatRoomThemeData!.sendIcon,
+              icon: AveoChatConfig
+                  .instance.aveoChatOptions.chatRoomThemeData!.sendIcon,
               onPressed: () async {
                 if (messageController.text.trim().isNotEmpty) {
                   try {
                     String trimmedMsg = messageController.text.trim();
                     messageController.clear();
-                    await MelosChat.instance.firebaseChatService
+                    await AveoChatConfig.instance.firebaseChatService
                         .sendMessageByChatId(
                       chatId: widget.chat.chatId,
                       message: Message(
                         message: trimmedMsg,
-                        sentBy: MelosChat.instance.user.userId,
+                        sentBy: AveoChatConfig.instance.user.userId,
                         timestamp: DateTime.now().toUtc().toIso8601String(),
                       ),
                     );

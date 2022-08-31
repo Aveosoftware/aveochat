@@ -37,8 +37,9 @@ class TheSearch extends SearchDelegate<String> {
   @override
   Widget buildSuggestions(BuildContext context) {
     return FutureBuilder(
-      future: MelosChat.instance.firebaseChatService
-          .findUsersBySearchQuery(query: query, user: MelosChat.instance.user),
+      future: AveoChatConfig.instance.firebaseChatService
+          .findUsersBySearchQuery(
+              query: query, user: AveoChatConfig.instance.user),
       builder: (context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.done) {
           if (query.isNotEmpty) {
@@ -54,10 +55,10 @@ class TheSearch extends SearchDelegate<String> {
                   (index) => ListTile(
                     onTap: () async {
                       try {
-                        ChatRoomModel chatRoom = await MelosChat
+                        ChatRoomModel chatRoom = await AveoChatConfig
                             .instance.firebaseChatService
                             .startNewChatRoom(
-                          currentUser: MelosChat.instance.user,
+                          currentUser: AveoChatConfig.instance.user,
                           otherUser: snapshot.data[index],
                         );
                         Navigator.of(context).push(MaterialPageRoute(
