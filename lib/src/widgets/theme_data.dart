@@ -26,7 +26,7 @@ class ChatRoomThemeData {
   });
 }
 
-class MelosChatOptions {
+class AveoChatConfigOptions {
   final bool allowUserSearch;
   final bool allowMessageDeletion;
   final String searchHint;
@@ -35,7 +35,7 @@ class MelosChatOptions {
   final Color? backgroundColor;
   final ChatRoomThemeData? chatRoomThemeData;
 
-  const MelosChatOptions({
+  const AveoChatConfigOptions({
     this.allowUserSearch = true,
     this.allowMessageDeletion = true,
     this.searchHint = 'Search',

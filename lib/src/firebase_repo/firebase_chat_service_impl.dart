@@ -37,7 +37,7 @@ class FirebaseChatServiceImpl extends FirebaseChatService {
           .doc(uniqueUserId)
           .snapshots()
           .map((event) =>
-              event.data() != null ? MelosUser.fromMap(event.data()!) : null);
+              event.data() != null ? AveoUser.fromMap(event.data()!) : null);
 
       data.listen((event) async {
         if (event?.chats != null) {
@@ -105,7 +105,7 @@ class FirebaseChatServiceImpl extends FirebaseChatService {
   }
 
   @override
-  Future createUser({required MelosUser user}) async {
+  Future createUser({required AveoUser user}) async {
     DocumentSnapshot<Map<String, dynamic>> doc =
         await db.collection(Collections.USERS).doc(user.userId).get();
     if (doc.exists) {
@@ -154,10 +154,10 @@ class FirebaseChatServiceImpl extends FirebaseChatService {
 
   @override
   Future<ChatRoomModel> startNewChatRoom(
-      {required MelosUser currentUser, required MelosUser otherUser}) async {
+      {required AveoUser currentUser, required AveoUser otherUser}) async {
     late ChatRoomModel newCreatedChat;
     try {
-      MelosUser myUser = MelosUser.fromMap(
+      AveoUser myUser = AveoUser.fromMap(
           (await db.collection(Collections.USERS).doc(currentUser.userId).get())
               .data()!);
       if (myUser.chats != null && myUser.chats!.isNotEmpty) {
@@ -165,7 +165,7 @@ class FirebaseChatServiceImpl extends FirebaseChatService {
           ChatRoomModel snap = ChatRoomModel.fromMap(
               (await db.collection(Collections.CHATROOMS).doc(chatRoomId).get())
                   .data()!);
-          List<MelosUser?>? users = snap.participants;
+          List<AveoUser?>? users = snap.participants;
           if (snap.participants.length == 2 &&
               users.firstWhereOrNull(
                       (element) => element!.userId == otherUser.userId) !=
@@ -180,10 +180,10 @@ class FirebaseChatServiceImpl extends FirebaseChatService {
             ChatRoomModel(
                     chatId: "",
                     participants: [
-                      MelosUser(
+                      AveoUser(
                           userId: currentUser.userId,
                           displayName: currentUser.displayName),
-                      MelosUser(
+                      AveoUser(
                           userId: otherUser.userId,
                           displayName: otherUser.displayName),
                     ],
@@ -193,13 +193,13 @@ class FirebaseChatServiceImpl extends FirebaseChatService {
       await docRef.update({"chatId": docRef.id});
       var thisUser =
           await db.collection(Collections.USERS).doc(currentUser.userId).get();
-      MelosUser user = MelosUser.fromMap(thisUser.data()!);
+      AveoUser user = AveoUser.fromMap(thisUser.data()!);
       user.chats!.add(docRef.id);
       thisUser.reference.update({'chats': user.chats});
 
       var thatUser =
           await db.collection(Collections.USERS).doc(otherUser.userId).get();
-      user = MelosUser.fromMap(thatUser.data()!);
+      user = AveoUser.fromMap(thatUser.data()!);
       user.chats!.add(docRef.id);
       thatUser.reference.update({'chats': user.chats});
 
@@ -211,9 +211,9 @@ class FirebaseChatServiceImpl extends FirebaseChatService {
   }
 
   @override
-  Future<List<MelosUser>> findUsersBySearchQuery(
-      {required String query, required MelosUser user}) async {
-    final List<MelosUser> suggestions = [];
+  Future<List<AveoUser>> findUsersBySearchQuery(
+      {required String query, required AveoUser user}) async {
+    final List<AveoUser> suggestions = [];
     try {
       QuerySnapshot<Map<String, dynamic>> data = await db
           .collection(Collections.USERS)
@@ -221,8 +221,8 @@ class FirebaseChatServiceImpl extends FirebaseChatService {
           .startAt([query.toUpperCase()]).endAt(
               ['${query.toLowerCase()}\uf8ff']).get();
       for (QueryDocumentSnapshot<Map<String, dynamic>> doc in data.docs) {
-        if (MelosUser.fromMap(doc.data()).userId != user.userId) {
-          suggestions.add(MelosUser.fromMap(doc.data()));
+        if (AveoUser.fromMap(doc.data()).userId != user.userId) {
+          suggestions.add(AveoUser.fromMap(doc.data()));
         }
       }
     } catch (e, s) {

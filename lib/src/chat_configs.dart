@@ -8,30 +8,30 @@ part of '../aveochat.dart';
 ///
 ///
 /// Usage :
-/// MelosChat(service: ChatService.FIREBASE)
+/// AveoChatConfig(service: ChatService.FIREBASE)
 enum ChatServices {
   FIREBASE,
 }
 
-class MelosChat {
+class AveoChatConfig {
   late ChatServices chatService;
-  late MelosUser user;
+  late AveoUser user;
   late FirebaseChatService firebaseChatService;
 
   // Customisations
-  late MelosChatOptions melosChatOptions;
+  late AveoChatConfigOptions aveoChatOptions;
 
-  MelosChat.internal();
-  static final MelosChat instance = MelosChat.internal();
+  AveoChatConfig.internal();
+  static final AveoChatConfig instance = AveoChatConfig.internal();
 
-  factory MelosChat({
+  factory AveoChatConfig({
     required ChatServices service,
-    required MelosUser user,
-    MelosChatOptions melosChatOptions = const MelosChatOptions(),
+    required AveoUser user,
+    AveoChatConfigOptions aveoChatOptions = const AveoChatConfigOptions(),
   }) {
     instance.chatService = service;
     instance.user = user;
-    instance.melosChatOptions = melosChatOptions;
+    instance.aveoChatOptions = aveoChatOptions;
     return instance;
   }
 

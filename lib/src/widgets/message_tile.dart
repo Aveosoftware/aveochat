@@ -62,7 +62,7 @@ Widget MessageBubble(
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                MelosChat.instance.melosChatOptions.chatRoomThemeData!
+                AveoChatConfig.instance.aveoChatOptions.chatRoomThemeData!
                         .showTimestamp
                     ? Text(
                         DateFormat('jm')
@@ -76,7 +76,7 @@ Widget MessageBubble(
                         ),
                       )
                     : Container(),
-                MelosChat.instance.melosChatOptions.chatRoomThemeData!
+                AveoChatConfig.instance.aveoChatOptions.chatRoomThemeData!
                         .enableReadReciepts
                     ? isMessageSent
                         ? const SizedBox(
@@ -84,7 +84,7 @@ Widget MessageBubble(
                           )
                         : Container()
                     : Container(),
-                MelosChat.instance.melosChatOptions.chatRoomThemeData!
+                AveoChatConfig.instance.aveoChatOptions.chatRoomThemeData!
                         .enableReadReciepts
                     ? isMessageSent
                         ? readStatus == ReadStatus.READ
