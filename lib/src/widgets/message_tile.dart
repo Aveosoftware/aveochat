@@ -62,47 +62,47 @@ Widget MessageBubble(
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                AveoChatConfig.instance.aveoChatOptions.chatRoomThemeData!
-                        .showTimestamp
+                AveoChatConfig.instance.aveoChatOptions.chatRoomThemeData
+                    .showTimestamp
                     ? Text(
-                        DateFormat('jm')
-                            .format(DateTime.parse(timestamp!).toLocal()),
-                        textAlign: TextAlign.end,
-                        style: TextStyle(
-                          color: isMessageSent
-                              ? sentMessageColor.withOpacity(0.7)
-                              : receivedMessageColor.withOpacity(0.7),
-                          fontSize: 11,
-                        ),
-                      )
+                  DateFormat('jm')
+                      .format(DateTime.parse(timestamp!).toLocal()),
+                  textAlign: TextAlign.end,
+                  style: TextStyle(
+                    color: isMessageSent
+                        ? sentMessageColor.withOpacity(0.7)
+                        : receivedMessageColor.withOpacity(0.7),
+                    fontSize: 11,
+                  ),
+                )
                     : Container(),
-                AveoChatConfig.instance.aveoChatOptions.chatRoomThemeData!
-                        .enableReadReciepts
+                AveoChatConfig.instance.aveoChatOptions.chatRoomThemeData
+                    .enableReadReciepts
                     ? isMessageSent
-                        ? const SizedBox(
-                            width: 8.0,
-                          )
-                        : Container()
+                    ? const SizedBox(
+                  width: 8.0,
+                )
+                    : Container()
                     : Container(),
-                AveoChatConfig.instance.aveoChatOptions.chatRoomThemeData!
-                        .enableReadReciepts
+                AveoChatConfig.instance.aveoChatOptions.chatRoomThemeData
+                    .enableReadReciepts
                     ? isMessageSent
-                        ? readStatus == ReadStatus.READ
-                            ? Icon(
-                                Icons.done_all,
-                                size: 12,
-                                color: isMessageSent
-                                    ? sentMessageColor.withOpacity(0.9)
-                                    : receivedMessageColor.withOpacity(0.9),
-                              )
-                            : Icon(
-                                Icons.done,
-                                size: 12,
-                                color: isMessageSent
-                                    ? sentMessageColor.withOpacity(0.9)
-                                    : receivedMessageColor.withOpacity(0.9),
-                              )
-                        : Container()
+                    ? readStatus == ReadStatus.READ
+                    ? Icon(
+                  Icons.done_all,
+                  size: 12,
+                  color: isMessageSent
+                      ? sentMessageColor.withOpacity(0.9)
+                      : receivedMessageColor.withOpacity(0.9),
+                )
+                    : Icon(
+                  Icons.done,
+                  size: 12,
+                  color: isMessageSent
+                      ? sentMessageColor.withOpacity(0.9)
+                      : receivedMessageColor.withOpacity(0.9),
+                )
+                    : Container()
                     : Container(),
               ],
             ),

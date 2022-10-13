@@ -11,7 +11,7 @@ class ChatRoomThemeData {
   final bool showTimestamp;
   final bool enableReadReciepts;
 
-  const ChatRoomThemeData({
+   const ChatRoomThemeData({
     this.messageHint = 'Message',
     this.sendIcon = const Icon(
       Icons.send,
@@ -33,7 +33,7 @@ class AveoChatConfigOptions {
   final Color? avatarBackgroundColor;
   final Color? chatTileColor;
   final Color? backgroundColor;
-  final ChatRoomThemeData? chatRoomThemeData;
+  final ChatRoomThemeData chatRoomThemeData;
 
   const AveoChatConfigOptions({
     this.allowUserSearch = true,
@@ -42,6 +42,6 @@ class AveoChatConfigOptions {
     this.avatarBackgroundColor,
     this.chatTileColor,
     this.backgroundColor,
-    this.chatRoomThemeData,
+    this.chatRoomThemeData = const ChatRoomThemeData(),
   });
 }

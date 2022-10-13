@@ -74,7 +74,7 @@ class _ChatRoomState extends State<ChatRoom> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: AveoChatConfig
-              .instance.aveoChatOptions.chatRoomThemeData?.backgroundColor ??
+              .instance.aveoChatOptions.chatRoomThemeData.backgroundColor ??
           Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(
@@ -146,25 +146,25 @@ class _ChatRoomState extends State<ChatRoom> {
                                 .instance
                                 .aveoChatOptions
                                 .chatRoomThemeData
-                                ?.receivedMessageColor ??
+                                .receivedMessageColor ??
                             Colors.blueGrey,
                         receivedMessageColor: AveoChatConfig
                                 .instance
                                 .aveoChatOptions
                                 .chatRoomThemeData
-                                ?.receivedMessageColor ??
+                                .receivedMessageColor ??
                             Colors.white,
                         sentMessageColor: AveoChatConfig
                                 .instance
                                 .aveoChatOptions
                                 .chatRoomThemeData
-                                ?.sentMessageColor ??
+                                .sentMessageColor ??
                             Colors.white,
                         sentMessageTileColor: AveoChatConfig
                                 .instance
                                 .aveoChatOptions
                                 .chatRoomThemeData
-                                ?.sentMessageTileColor ??
+                                .sentMessageTileColor ??
                             Theme.of(context).primaryColor,
                         onLongPress: () {
                           if (!hasSelectionStarted &&
@@ -229,7 +229,7 @@ class _ChatRoomState extends State<ChatRoom> {
               maxLines: 6,
               decoration: InputDecoration(
                 hintText: AveoChatConfig
-                    .instance.aveoChatOptions.chatRoomThemeData!.messageHint,
+                    .instance.aveoChatOptions.chatRoomThemeData.messageHint,
                 focusedBorder:
                     const OutlineInputBorder(borderSide: BorderSide.none),
                 enabledBorder:
@@ -238,7 +238,7 @@ class _ChatRoomState extends State<ChatRoom> {
             ),
             trailing: IconButton(
               icon: AveoChatConfig
-                  .instance.aveoChatOptions.chatRoomThemeData!.sendIcon,
+                  .instance.aveoChatOptions.chatRoomThemeData.sendIcon,
               onPressed: () async {
                 if (messageController.text.trim().isNotEmpty) {
                   try {
