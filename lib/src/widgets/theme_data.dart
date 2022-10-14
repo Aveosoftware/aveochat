@@ -10,8 +10,9 @@ class ChatRoomThemeData {
   final Color? backgroundColor;
   final bool showTimestamp;
   final bool enableReadReciepts;
+  final ChatRoomAppBarThemeData chatRoomAppBarThemeData;
 
-   const ChatRoomThemeData({
+  const ChatRoomThemeData({
     this.messageHint = 'Message',
     this.sendIcon = const Icon(
       Icons.send,
@@ -23,6 +24,21 @@ class ChatRoomThemeData {
     this.backgroundColor,
     this.showTimestamp = true,
     this.enableReadReciepts = true,
+    this.chatRoomAppBarThemeData = const ChatRoomAppBarThemeData(),
+  });
+}
+
+class ChatRoomAppBarThemeData {
+  final Color? backgroundColor;
+  final Color? foregroundColor;
+  final bool? centerTitle;
+  final double? elevation;
+
+  const ChatRoomAppBarThemeData({
+    this.backgroundColor,
+    this.foregroundColor,
+    this.centerTitle,
+    this.elevation,
   });
 }
 

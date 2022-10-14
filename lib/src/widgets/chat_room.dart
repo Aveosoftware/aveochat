@@ -73,6 +73,14 @@ class _ChatRoomState extends State<ChatRoom> {
               .instance.aveoChatOptions.chatRoomThemeData.backgroundColor ??
           Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
+        backgroundColor: AveoChatConfig.instance.aveoChatOptions
+            .chatRoomThemeData.chatRoomAppBarThemeData.backgroundColor,
+        centerTitle: AveoChatConfig.instance.aveoChatOptions.chatRoomThemeData
+            .chatRoomAppBarThemeData.centerTitle,
+        elevation: AveoChatConfig.instance.aveoChatOptions.chatRoomThemeData
+            .chatRoomAppBarThemeData.elevation,
+        foregroundColor: AveoChatConfig.instance.aveoChatOptions
+            .chatRoomThemeData.chatRoomAppBarThemeData.foregroundColor,
         title: Text(
           AveoChatConfig.instance.firebaseChatService.getChatRoomName(
               chat: widget.chat,
