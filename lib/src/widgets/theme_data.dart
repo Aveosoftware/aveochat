@@ -42,6 +42,23 @@ class ChatRoomAppBarThemeData {
   });
 }
 
+/// AveoChatConfigOptions
+///
+/// This class provides variety of configuration
+/// and theme options within the module.
+///
+/// Example to set custom theme or configurations :
+///
+///   AveoChatConfig.setAveoChatConfigOptions(
+///       aveoChatConfigOptions: const AveoChatConfigOptions(
+///     chatRoomThemeData: ChatRoomThemeData(
+///       chatRoomAppBarThemeData: ChatRoomAppBarThemeData(
+///         backgroundColor: Colors.white,
+///         foregroundColor: Colors.black,
+///         elevation: 0,
+///       ),
+///     ),
+///   ));
 class AveoChatConfigOptions {
   final bool allowUserSearch;
   final bool allowMessageDeletion;

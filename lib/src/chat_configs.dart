@@ -2,13 +2,13 @@ part of '../aveochat.dart';
 
 /// ChatServices
 ///
-/// List of available chat services provided by Melos Chat Module.
+/// List of available chat services provided by Aveo Chat Module.
 /// * FIREBASE - Chatting service based on firebase firestore as backend.
 ///
 ///
 ///
 /// Usage :
-/// AveoChatConfig(service: ChatService.FIREBASE)
+/// AveoChatConfig(...).getService(ChatService.FIREBASE)
 enum ChatServices {
   FIREBASE,
 }
@@ -19,31 +19,42 @@ class AveoChatConfig {
   late FirebaseChatService firebaseChatService;
 
   // Customisations
-  late AveoChatConfigOptions aveoChatOptions;
+  late AveoChatConfigOptions aveoChatOptions = const AveoChatConfigOptions();
 
   AveoChatConfig.internal();
   static final AveoChatConfig instance = AveoChatConfig.internal();
 
-  factory AveoChatConfig({
-    required ChatServices service,
-    required AveoUser user,
-    AveoChatConfigOptions aveoChatOptions = const AveoChatConfigOptions(),
+  // factory AveoChatConfig.init({
+  //   required AveoUser user,
+  // }) {
+  //   instance.user = user;
+  //   return instance;
+  // }
+
+  void setAveoChatConfigOptions({
+    required ChatServices chatService,
+    required AveoChatConfigOptions aveoChatConfigOptions,
   }) {
-    instance.chatService = service;
-    instance.user = user;
-    instance.aveoChatOptions = aveoChatOptions;
-    return instance;
+    instance.chatService = chatService;
+    initializeService();
+    instance.aveoChatOptions = aveoChatConfigOptions;
   }
 
-  Future<MM> getService<MM>() async {
+  Future<void> setUser({required AveoUser aveoUser}) async {
+    instance.user = aveoUser;
     switch (instance.chatService) {
       case ChatServices.FIREBASE:
-        // call firebase
+        await instance.firebaseChatService.createUser(user: instance.user);
+    }
+  }
+
+  Future<void> initializeService<MM>() async {
+    switch (instance.chatService) {
+      case ChatServices.FIREBASE:
+        instance.chatService = ChatServices.FIREBASE;
         instance.firebaseChatService =
             FirebaseChatServiceImpl(FirebaseFirestore.instance);
-        instance.firebaseChatService.createUser(user: instance.user);
-        MM obj = instance.firebaseChatService as MM;
-        return obj;
+        await instance.firebaseChatService.createUser(user: instance.user);
     }
   }
 }
