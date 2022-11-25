@@ -54,7 +54,7 @@ class AveoChatConfig {
         instance.chatService = ChatServices.FIREBASE;
         instance.firebaseChatService =
             FirebaseChatServiceImpl(FirebaseFirestore.instance);
-        await instance.firebaseChatService.createUser(user: instance.user);
+      // await instance.firebaseChatService.createUser(user: instance.user);
     }
   }
 }
