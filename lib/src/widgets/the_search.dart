@@ -59,11 +59,15 @@ class TheSearch extends SearchDelegate<String> {
                           currentUser: AveoChatConfig.instance.user,
                           otherUser: snapshot.data[index],
                         );
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => ChatRoom(
-                            chat: chatRoom,
-                          ),
-                        ));
+                        chatObject = chatRoom;
+                        pageController.nextPage(
+                            duration: const Duration(milliseconds: 200),
+                            curve: Curves.linear);
+                        // Navigator.of(context).push(MaterialPageRoute(
+                        //   builder: (context) => ChatRoom(
+                        //     chat: chatRoom,
+                        //   ),
+                        // ));
                       } catch (e, s) {
                         print(s);
                       }

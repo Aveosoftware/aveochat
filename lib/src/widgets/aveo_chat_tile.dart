@@ -12,11 +12,14 @@ Widget ChatTile(
   return ListTile(
     onTap: () {
       FocusManager.instance.primaryFocus!.unfocus();
-      Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => ChatRoom(
-          chat: chat,
-        ),
-      ));
+      chatObject = chat;
+      pageController.nextPage(
+          duration: const Duration(milliseconds: 200), curve: Curves.linear);
+      // Navigator.of(context).push(MaterialPageRoute(
+      //   builder: (context) => ChatRoom(
+      //     chat: chat,
+      //   ),
+      // ));
     },
     tileColor: chatTileColor,
     leading: CircleAvatar(

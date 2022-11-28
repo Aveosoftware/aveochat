@@ -23,18 +23,18 @@ class _ChatRoomState extends State<ChatRoom> {
   void initState() {
     conversationStream = AveoChatConfig.instance.firebaseChatService
         .getConversationStreamByChatIdForUserId(
-            userId: widget.chat.participants
+            userId: chatObject.participants
                 .firstWhere((element) =>
                     element.userId != AveoChatConfig.instance.user.userId)
                 .userId,
-            chatId: widget.chat.chatId,
+            chatId: chatObject.chatId,
             descending: true);
     super.initState();
   }
 
   deleteSelection() async {
     await AveoChatConfig.instance.firebaseChatService.deleteConversation(
-      chatId: widget.chat.chatId,
+      chatId: chatObject.chatId,
       selectedMessageIds: selectionList.map((e) => e.msgId).toList(),
     );
     clearSelection();
@@ -83,9 +83,16 @@ class _ChatRoomState extends State<ChatRoom> {
             .chatRoomThemeData.chatRoomAppBarThemeData.foregroundColor,
         title: Text(
           AveoChatConfig.instance.firebaseChatService.getChatRoomName(
-              chat: widget.chat,
+              chat: chatObject,
               thisUserId: AveoChatConfig.instance.user.userId),
         ),
+        leading: IconButton(
+            onPressed: () {
+              pageController.previousPage(
+                  duration: const Duration(milliseconds: 200),
+                  curve: Curves.linear);
+            },
+            icon: const Icon(Icons.keyboard_arrow_left)),
         actions: [
           AveoChatConfig.instance.aveoChatOptions.allowMessageDeletion
               ? hasSelectionStarted
@@ -250,7 +257,7 @@ class _ChatRoomState extends State<ChatRoom> {
                     messageController.clear();
                     await AveoChatConfig.instance.firebaseChatService
                         .sendMessageByChatId(
-                      chatId: widget.chat.chatId,
+                      chatId: chatObject.chatId,
                       message: Message(
                         message: trimmedMsg,
                         sentBy: AveoChatConfig.instance.user.userId,
