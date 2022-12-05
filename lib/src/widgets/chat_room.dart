@@ -239,15 +239,22 @@ class _ChatRoomState extends State<ChatRoom> {
                   try {
                     String trimmedMsg = messageController.text.trim();
                     messageController.clear();
-                    await AveoChatConfig.instance.firebaseChatService
-                        .sendMessageByChatId(
-                      chatId: chatObject.chatId,
-                      message: Message(
+                    setState(() {
+                      conversation.add(Message(
                         message: trimmedMsg,
                         sentBy: AveoChatConfig.instance.user.userId,
                         timestamp: DateTime.now().toUtc().toIso8601String(),
-                      ),
-                    );
+                      ));
+                    });
+                    // await AveoChatConfig.instance.firebaseChatService
+                    //     .sendMessageByChatId(
+                    //   chatId: chatObject.chatId,
+                    //   message: Message(
+                    //     message: trimmedMsg,
+                    //     sentBy: AveoChatConfig.instance.user.userId,
+                    //     timestamp: DateTime.now().toUtc().toIso8601String(),
+                    //   ),
+                    // );
                   } catch (e) {
                     print(e);
                   }
