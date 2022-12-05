@@ -21,15 +21,62 @@ class _ChatRoomState extends State<ChatRoom> {
 
   @override
   void initState() {
-    conversationStream = AveoChatConfig.instance.firebaseChatService
-        .getConversationStreamByChatIdForUserId(
-            userId: chatObject.participants
-                .firstWhere((element) =>
-                    element.userId != AveoChatConfig.instance.user.userId)
-                .userId,
-            chatId: chatObject.chatId,
-            descending: true);
+    // conversationStream = AveoChatConfig.instance.firebaseChatService
+    //     .getConversationStreamByChatIdForUserId(
+    //         userId: chatObject.participants
+    //             .firstWhere((element) =>
+    //                 element.userId != AveoChatConfig.instance.user.userId)
+    //             .userId,
+    //         chatId: chatObject.chatId,
+    //         descending: true);
+    addDemoData();
     super.initState();
+  }
+
+  addDemoData() {
+    conversation.add(
+      Message(
+          message: "Hello",
+          sentBy: AveoChatConfig.instance.user.userId,
+          timestamp:
+              DateTime.now().subtract(Duration(minutes: 40)).toIso8601String()),
+    );
+
+    conversation.add(
+      Message(
+          message: "Hey Man",
+          sentBy: '',
+          timestamp: DateTime.now()
+              .subtract(const Duration(minutes: 38))
+              .toIso8601String()),
+    );
+
+    conversation.add(
+      Message(
+          message: "How are you?",
+          sentBy: AveoChatConfig.instance.user.userId,
+          timestamp: DateTime.now()
+              .subtract(const Duration(minutes: 37))
+              .toIso8601String()),
+    );
+
+    conversation.add(
+      Message(
+          message: "I'm doing good",
+          sentBy: '',
+          timestamp: DateTime.now()
+              .subtract(const Duration(minutes: 40))
+              .toIso8601String()),
+    );
+
+    conversation.add(
+      Message(
+          message: "What about you?",
+          sentBy: '',
+          timestamp: DateTime.now()
+              .subtract(const Duration(minutes: 40))
+              .toIso8601String()),
+    );
   }
 
   deleteSelection() async {
@@ -120,107 +167,44 @@ class _ChatRoomState extends State<ChatRoom> {
               : Container()
         ],
       ),
-      body: StreamBuilder(
-        stream: conversationStream,
-        builder: (context, AsyncSnapshot<List<Message>> snapshot) {
-          // WHEN LOADING
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              heightFactor: 8,
-              child: CircularProgressIndicator(),
-            );
-          }
-          // WHEN DATA IS LOADED
-          if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-            return Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Expanded(
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    reverse: true,
-                    itemCount: snapshot.data?.length,
-                    itemBuilder: (context, index) {
-                      return MessageBubble(
-                        context,
-                        readStatus: snapshot.data![index].readStatus,
-                        isSelected: selectionList.firstWhereOrNull((element) =>
-                                element.msgId == snapshot.data![index].msgId) !=
-                            null,
-                        isDeleted: snapshot.data![index].isDeleted,
-                        message: snapshot.data![index].message,
-                        isMessageSent: snapshot.data![index].sentBy ==
-                            AveoChatConfig.instance.user.userId,
-                        timestamp: snapshot.data![index].timestamp,
-                        receivedMessageTileColor: AveoChatConfig
-                                .instance
-                                .aveoChatOptions
-                                .chatRoomThemeData
-                                .receivedMessageColor ??
-                            Colors.blueGrey,
-                        receivedMessageColor: AveoChatConfig
-                                .instance
-                                .aveoChatOptions
-                                .chatRoomThemeData
-                                .receivedMessageColor ??
-                            Colors.white,
-                        sentMessageColor: AveoChatConfig
-                                .instance
-                                .aveoChatOptions
-                                .chatRoomThemeData
-                                .sentMessageColor ??
-                            Colors.white,
-                        sentMessageTileColor: AveoChatConfig
-                                .instance
-                                .aveoChatOptions
-                                .chatRoomThemeData
-                                .sentMessageTileColor ??
-                            Theme.of(context).primaryColor,
-                        onLongPress: () {
-                          if (!hasSelectionStarted &&
-                              !snapshot.data![index].isDeleted) {
-                            if (snapshot.data![index].sentBy ==
-                                AveoChatConfig.instance.user.userId) {
-                              selectionList.add(snapshot.data![index]);
-                              hasSelectionStarted = true;
-                              setState(() {});
-                            }
-                          }
-                        },
-                        onTap: () {
-                          if (hasSelectionStarted &&
-                              !snapshot.data![index].isDeleted) {
-                            if (selectionList.firstWhereOrNull((element) =>
-                                    element.msgId ==
-                                    snapshot.data![index].msgId) !=
-                                null) {
-                              selectionList.remove(snapshot.data![index]);
-                              if (selectionList.isEmpty) {
-                                hasSelectionStarted = false;
-                              }
-                            } else {
-                              if (snapshot.data![index].sentBy ==
-                                  AveoChatConfig.instance.user.userId) {
-                                selectionList.add(snapshot.data![index]);
-                              }
-                            }
-                            setState(() {});
-                          }
-                        },
-                      );
-                    },
-                  ),
-                ),
-              ],
-            );
-          }
-          // IF NO DATA IS AVAILABLE
-          return const Center(
-            heightFactor: 8,
-            child: Text("Send a Hii..!"),
-          );
-        },
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          ...List.generate(
+              conversation.length,
+              (index) => MessageBubble(
+                    context,
+                    readStatus: 1,
+                    isDeleted: false,
+                    message: conversation[index].message,
+                    isMessageSent: conversation[index].sentBy ==
+                        AveoChatConfig.instance.user.userId,
+                    timestamp: conversation[index].timestamp,
+                    receivedMessageTileColor: AveoChatConfig
+                            .instance
+                            .aveoChatOptions
+                            .chatRoomThemeData
+                            .receivedMessageColor ??
+                        Colors.blueGrey,
+                    receivedMessageColor: AveoChatConfig
+                            .instance
+                            .aveoChatOptions
+                            .chatRoomThemeData
+                            .receivedMessageColor ??
+                        Colors.white,
+                    sentMessageColor: AveoChatConfig.instance.aveoChatOptions
+                            .chatRoomThemeData.sentMessageColor ??
+                        Colors.white,
+                    sentMessageTileColor: AveoChatConfig
+                            .instance
+                            .aveoChatOptions
+                            .chatRoomThemeData
+                            .sentMessageTileColor ??
+                        Theme.of(context).primaryColor,
+                    onLongPress: () {},
+                    onTap: () {},
+                  )).toList(),
+        ],
       ),
       bottomNavigationBar: SafeArea(
         child: Container(
