@@ -35,7 +35,7 @@ class TheSearch extends SearchDelegate<String> {
   @override
   Widget buildSuggestions(BuildContext context) {
     return FutureBuilder(
-      future: AveoChatConfig.instance.firebaseChatService
+      future: AveoChatConfig.instance.chatServiceFramework
           .findUsersBySearchQuery(
               query: query, user: AveoChatConfig.instance.user),
       builder: (context, AsyncSnapshot snapshot) {
@@ -54,7 +54,7 @@ class TheSearch extends SearchDelegate<String> {
                     onTap: () async {
                       try {
                         ChatRoomModel chatRoom = await AveoChatConfig
-                            .instance.firebaseChatService
+                            .instance.chatServiceFramework
                             .startNewChatRoom(
                           currentUser: AveoChatConfig.instance.user,
                           otherUser: snapshot.data[index],

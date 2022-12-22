@@ -1,14 +1,15 @@
 part of '../../aveochat.dart';
 
-Widget ChatTile(
+Widget ChatTileOld(
   context, {
   required String chatName,
   Color? chatTileColor,
   Color? avatarBackgroundColor,
   required ChatRoomModel chat,
 }) {
-  String chatName = AveoChatConfig.instance.firebaseChatService.getChatRoomName(
-      chat: chat, thisUserId: AveoChatConfig.instance.user.userId);
+  String chatName = AveoChatConfig.instance.chatServiceFramework
+      .getChatRoomName(
+          chat: chat, thisUserId: AveoChatConfig.instance.user.userId);
   return ListTile(
     onTap: () {
       FocusManager.instance.primaryFocus!.unfocus();
@@ -18,10 +19,12 @@ Widget ChatTile(
         ),
       ));
     },
-    tileColor: chatTileColor,
+    tileColor: AveoChatConfig.instance.aveoChatOptions.chatTileColor,
     leading: CircleAvatar(
       radius: 20,
-      backgroundColor: avatarBackgroundColor ?? Theme.of(context).primaryColor,
+      backgroundColor:
+          AveoChatConfig.instance.aveoChatOptions.avatarBackgroundColor ??
+              Theme.of(context).primaryColor,
       child: Text(chatName[0].toUpperCase()),
     ),
     title: Text(chatName.toTitleCase()),

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ChatShimmer extends StatelessWidget {
-  const ChatShimmer({Key? key, required BuildContext context})
-      : super(key: key);
+  const ChatShimmer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class ChatShimmer extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        width: MediaQuery.of(context).size.width,
+                        width: Get.width,
                         height: 12,
                         color: Colors.red,
                         child: Container(),
@@ -36,7 +36,7 @@ class ChatShimmer extends StatelessWidget {
                         height: 4,
                       ),
                       Container(
-                        width: MediaQuery.of(context).size.width * 0.6,
+                        width: Get.width * 0.6,
                         height: 8,
                         color: Colors.red,
                         child: Container(),

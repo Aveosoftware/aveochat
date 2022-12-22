@@ -21,7 +21,7 @@ class _ChatRoomState extends State<ChatRoom> {
 
   @override
   void initState() {
-    conversationStream = AveoChatConfig.instance.firebaseChatService
+    conversationStream = AveoChatConfig.instance.chatServiceFramework
         .getConversationStreamByChatIdForUserId(
             userId: widget.chat.participants
                 .firstWhere((element) =>
@@ -33,7 +33,7 @@ class _ChatRoomState extends State<ChatRoom> {
   }
 
   deleteSelection() async {
-    await AveoChatConfig.instance.firebaseChatService.deleteConversation(
+    await AveoChatConfig.instance.chatServiceFramework.deleteConversation(
       chatId: widget.chat.chatId,
       selectedMessageIds: selectionList.map((e) => e.msgId).toList(),
     );
@@ -82,7 +82,7 @@ class _ChatRoomState extends State<ChatRoom> {
         foregroundColor: AveoChatConfig.instance.aveoChatOptions
             .chatRoomThemeData.chatRoomAppBarThemeData.foregroundColor,
         title: Text(
-          AveoChatConfig.instance.firebaseChatService.getChatRoomName(
+          AveoChatConfig.instance.chatServiceFramework.getChatRoomName(
               chat: widget.chat,
               thisUserId: AveoChatConfig.instance.user.userId),
         ),
@@ -248,7 +248,7 @@ class _ChatRoomState extends State<ChatRoom> {
                   try {
                     String trimmedMsg = messageController.text.trim();
                     messageController.clear();
-                    await AveoChatConfig.instance.firebaseChatService
+                    await AveoChatConfig.instance.chatServiceFramework
                         .sendMessageByChatId(
                       chatId: widget.chat.chatId,
                       message: Message(

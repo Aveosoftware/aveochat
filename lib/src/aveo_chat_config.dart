@@ -14,22 +14,20 @@ enum ChatServices {
 }
 
 class AveoChatConfig {
+  /// Select a service to be used for backend.
   late ChatServices chatService;
-  late AveoUser user;
-  late FirebaseChatService firebaseChatService;
 
+  /// Defined model of user.
+  late AveoUser user;
+
+  /// An abstract class that handles multiple service implementations.
+  late ChatServiceFramework chatServiceFramework;
   // Customisations
   late AveoChatConfigOptions aveoChatOptions = const AveoChatConfigOptions();
 
+  // Singleton
   AveoChatConfig.internal();
   static final AveoChatConfig instance = AveoChatConfig.internal();
-
-  // factory AveoChatConfig.init({
-  //   required AveoUser user,
-  // }) {
-  //   instance.user = user;
-  //   return instance;
-  // }
 
   void setAveoChatConfigOptions({
     required ChatServices chatService,
@@ -44,7 +42,7 @@ class AveoChatConfig {
     instance.user = aveoUser;
     switch (instance.chatService) {
       case ChatServices.FIREBASE:
-        await instance.firebaseChatService.createUser(user: instance.user);
+        await instance.chatServiceFramework.createUser(user: instance.user);
     }
   }
 
@@ -52,9 +50,8 @@ class AveoChatConfig {
     switch (instance.chatService) {
       case ChatServices.FIREBASE:
         instance.chatService = ChatServices.FIREBASE;
-        instance.firebaseChatService =
-            FirebaseChatServiceImpl(FirebaseFirestore.instance);
-      // await instance.firebaseChatService.createUser(user: instance.user);
+        instance.chatServiceFramework =
+            FirebaseChatService(FirebaseFirestore.instance);
     }
   }
 }
