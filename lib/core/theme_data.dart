@@ -8,6 +8,8 @@ class ChatRoomThemeData {
   final Color? sentMessageTileColor;
   final Color? receivedMessageTileColor;
   final Color? backgroundColor;
+  final Icon deleteMessageIcon;
+  final Icon copyMessageIcon;
   final bool showTimestamp;
   final bool enableReadReciepts;
   final ChatRoomAppBarThemeData chatRoomAppBarThemeData;
@@ -16,6 +18,14 @@ class ChatRoomThemeData {
     this.messageHint = 'Message',
     this.sendIcon = const Icon(
       Icons.send,
+    ),
+    this.deleteMessageIcon = const Icon(
+      Icons.delete,
+      color: Colors.redAccent,
+    ),
+    this.copyMessageIcon = const Icon(
+      Icons.copy_all,
+      color: Colors.black,
     ),
     this.sentMessageColor,
     this.receivedMessageColor,

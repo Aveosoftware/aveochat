@@ -1,4 +1,5 @@
 import 'package:aveochat/app/modules/aveo_chat/controllers/aveo_chat_controller.dart';
+import 'package:aveochat/app/modules/chat_room/controllers/chat_room_controller.dart';
 import 'package:aveochat/app/modules/chat_room/views/chat_room_view.dart';
 import 'package:aveochat/aveochat.dart';
 import 'package:flutter/material.dart';
@@ -16,10 +17,11 @@ class ChatTile extends GetView<AveoChatController> {
     return ListTile(
       onTap: () {
         FocusManager.instance.primaryFocus!.unfocus();
+        final ChatRoomController chatRoomController =
+            Get.put(ChatRoomController(chat: chat));
+
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => ChatRoomView(
-            chat: chat,
-          ),
+          builder: (context) => ChatRoomView(),
         ));
       },
       tileColor: AveoChatConfig.instance.aveoChatOptions.chatTileColor,

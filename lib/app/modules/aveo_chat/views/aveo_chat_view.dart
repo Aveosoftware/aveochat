@@ -109,12 +109,15 @@ class AveoChat extends GetView {
                                                   .clear();
                                               controller.searchQuery.value = '';
 
+                                              final ChatRoomController
+                                                  chatRoomController = Get.put(
+                                                      ChatRoomController(
+                                                          chat: chatRoom));
+
                                               Navigator.of(context)
                                                   .push(MaterialPageRoute(
                                                 builder: (context) =>
-                                                    ChatRoomView(
-                                                  chat: chatRoom,
-                                                ),
+                                                    ChatRoomView(),
                                               ));
                                             } catch (e, s) {
                                               log(s.toString());
