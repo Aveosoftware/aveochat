@@ -1,7 +1,8 @@
 part of '../../../aveochat.dart';
 
-class FirebaseChatServiceImpl extends FirebaseChatService {
-  FirebaseChatServiceImpl(super.db);
+class FirebaseChatService implements ChatServiceFramework {
+  late FirebaseFirestore db;
+  FirebaseChatService(this.db);
 
   @override
   Future<List<ChatRoomModel>> getChatsByUserId(

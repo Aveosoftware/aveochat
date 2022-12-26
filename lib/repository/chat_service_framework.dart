@@ -1,10 +1,6 @@
-part of '../../../aveochat.dart';
+part of '../../aveochat.dart';
 
-abstract class FirebaseChatService {
-  /// Access the FirestoreFirebase instance as db. (Similar to FirebaseFirestore.instance)
-  FirebaseFirestore db;
-  FirebaseChatService(this.db);
-
+abstract class ChatServiceFramework {
   /// Create a user entry in firestore inside users collection.
   Future createUser({required AveoUser user});
 

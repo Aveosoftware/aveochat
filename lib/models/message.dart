@@ -1,4 +1,4 @@
-part of '../../../aveochat.dart';
+part of '../aveochat.dart';
 
 class Message {
   String msgId;
