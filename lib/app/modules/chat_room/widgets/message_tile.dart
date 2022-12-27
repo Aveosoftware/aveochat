@@ -83,7 +83,8 @@ class MessageBubble extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   AveoChatConfig.instance.aveoChatOptions.chatRoomThemeData
-                          .showTimestamp
+                              .showTimestamp &&
+                          !isDeleted
                       ? Text(
                           DateFormat('jm')
                               .format(DateTime.parse(timestamp!).toLocal()),
@@ -97,7 +98,8 @@ class MessageBubble extends StatelessWidget {
                         )
                       : Container(),
                   AveoChatConfig.instance.aveoChatOptions.chatRoomThemeData
-                          .enableReadReciepts
+                              .enableReadReciepts &&
+                          !isDeleted
                       ? isMessageSent
                           ? const SizedBox(
                               width: 8.0,
@@ -105,7 +107,8 @@ class MessageBubble extends StatelessWidget {
                           : Container()
                       : Container(),
                   AveoChatConfig.instance.aveoChatOptions.chatRoomThemeData
-                          .enableReadReciepts
+                              .enableReadReciepts &&
+                          !isDeleted
                       ? isMessageSent
                           ? readStatus == ReadStatus.READ
                               ? Icon(

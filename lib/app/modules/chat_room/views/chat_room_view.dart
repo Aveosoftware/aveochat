@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import '../controllers/chat_room_controller.dart';
 
 class ChatRoomView extends StatefulWidget {
-  ChatRoomView({
+  const ChatRoomView({
     Key? key,
   }) : super(key: key);
 
@@ -20,20 +20,19 @@ class _ChatRoomViewState extends State<ChatRoomView> {
 
   @override
   Widget build(BuildContext context) {
+    var chatroomThemeData =
+        AveoChatConfig.instance.aveoChatOptions.chatRoomThemeData;
     return Scaffold(
-      backgroundColor: AveoChatConfig
-              .instance.aveoChatOptions.chatRoomThemeData.backgroundColor ??
+      backgroundColor: chatroomThemeData.backgroundColor ??
           Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: Text(controller.chat.chatName),
-        backgroundColor: AveoChatConfig.instance.aveoChatOptions
-            .chatRoomThemeData.chatRoomAppBarThemeData.backgroundColor,
-        centerTitle: AveoChatConfig.instance.aveoChatOptions.chatRoomThemeData
-            .chatRoomAppBarThemeData.centerTitle,
-        elevation: AveoChatConfig.instance.aveoChatOptions.chatRoomThemeData
-            .chatRoomAppBarThemeData.elevation,
-        foregroundColor: AveoChatConfig.instance.aveoChatOptions
-            .chatRoomThemeData.chatRoomAppBarThemeData.foregroundColor,
+        backgroundColor:
+            chatroomThemeData.chatRoomAppBarThemeData.backgroundColor,
+        centerTitle: chatroomThemeData.chatRoomAppBarThemeData.centerTitle,
+        elevation: chatroomThemeData.chatRoomAppBarThemeData.elevation,
+        foregroundColor:
+            chatroomThemeData.chatRoomAppBarThemeData.foregroundColor,
         actions: [
           AveoChatConfig.instance.aveoChatOptions.allowMessageDeletion
               ? Obx(
@@ -42,8 +41,7 @@ class _ChatRoomViewState extends State<ChatRoomView> {
                           onPressed: () async {
                             await controller.deleteSelection();
                           },
-                          icon: AveoChatConfig.instance.aveoChatOptions
-                              .chatRoomThemeData.deleteMessageIcon,
+                          icon: chatroomThemeData.deleteMessageIcon,
                         )
                       : const SizedBox.shrink(),
                 )
@@ -54,8 +52,7 @@ class _ChatRoomViewState extends State<ChatRoomView> {
                     onPressed: () async {
                       await controller.copySelection();
                     },
-                    icon: AveoChatConfig.instance.aveoChatOptions
-                        .chatRoomThemeData.copyMessageIcon,
+                    icon: chatroomThemeData.copyMessageIcon,
                   )
                 : const SizedBox.shrink(),
           )
@@ -98,30 +95,18 @@ class _ChatRoomViewState extends State<ChatRoomView> {
                             isMessageSent: snapshot.data![index].sentBy ==
                                 AveoChatConfig.instance.user.userId,
                             timestamp: snapshot.data![index].timestamp,
-                            receivedMessageTileColor: AveoChatConfig
-                                    .instance
-                                    .aveoChatOptions
-                                    .chatRoomThemeData
-                                    .receivedMessageColor ??
-                                Colors.blueGrey,
-                            receivedMessageColor: AveoChatConfig
-                                    .instance
-                                    .aveoChatOptions
-                                    .chatRoomThemeData
-                                    .receivedMessageColor ??
-                                Colors.white,
-                            sentMessageColor: AveoChatConfig
-                                    .instance
-                                    .aveoChatOptions
-                                    .chatRoomThemeData
-                                    .sentMessageColor ??
-                                Colors.white,
-                            sentMessageTileColor: AveoChatConfig
-                                    .instance
-                                    .aveoChatOptions
-                                    .chatRoomThemeData
-                                    .sentMessageTileColor ??
-                                Theme.of(context).primaryColor,
+                            receivedMessageTileColor:
+                                chatroomThemeData.receivedMessageColor ??
+                                    Colors.blueGrey,
+                            receivedMessageColor:
+                                chatroomThemeData.receivedMessageColor ??
+                                    Colors.white,
+                            sentMessageColor:
+                                chatroomThemeData.sentMessageColor ??
+                                    Colors.white,
+                            sentMessageTileColor:
+                                chatroomThemeData.sentMessageTileColor ??
+                                    Theme.of(context).primaryColor,
                             onLongPress: () {
                               if (!controller.hasSelectionStarted.value &&
                                   !snapshot.data![index].isDeleted &&
