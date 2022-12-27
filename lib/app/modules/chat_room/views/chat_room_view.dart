@@ -25,11 +25,7 @@ class _ChatRoomViewState extends State<ChatRoomView> {
               .instance.aveoChatOptions.chatRoomThemeData.backgroundColor ??
           Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: Text(
-          AveoChatConfig.instance.chatServiceFramework.getChatRoomName(
-              chat: controller.chat,
-              thisUserId: AveoChatConfig.instance.user.userId),
-        ),
+        title: Text(controller.chat.chatName),
         backgroundColor: AveoChatConfig.instance.aveoChatOptions
             .chatRoomThemeData.chatRoomAppBarThemeData.backgroundColor,
         centerTitle: AveoChatConfig.instance.aveoChatOptions.chatRoomThemeData

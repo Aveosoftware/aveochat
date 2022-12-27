@@ -1,5 +1,7 @@
 # This is a generated file; do not edit or check into version control.
 cloud_firestore=/Users/aveosoft/flutter/2.10.4/.pub-cache/hosted/pub.dartlang.org/cloud_firestore-4.0.2/
-cloud_firestore_web=/Users/aveosoft/flutter/2.10.4/.pub-cache/hosted/pub.dartlang.org/cloud_firestore_web-3.0.2/
-firebase_core=/Users/aveosoft/flutter/2.10.4/.pub-cache/hosted/pub.dartlang.org/firebase_core-2.1.0/
-firebase_core_web=/Users/aveosoft/flutter/2.10.4/.pub-cache/hosted/pub.dartlang.org/firebase_core_web-2.0.0/
+cloud_firestore_web=/Users/aveosoft/flutter/2.10.4/.pub-cache/hosted/pub.dartlang.org/cloud_firestore_web-3.2.0/
+firebase_core=/Users/aveosoft/flutter/2.10.4/.pub-cache/hosted/pub.dartlang.org/firebase_core-2.4.0/
+firebase_core_web=/Users/aveosoft/flutter/2.10.4/.pub-cache/hosted/pub.dartlang.org/firebase_core_web-2.0.2/
+firebase_storage=/Users/aveosoft/flutter/2.10.4/.pub-cache/hosted/pub.dartlang.org/firebase_storage-11.0.9/
+firebase_storage_web=/Users/aveosoft/flutter/2.10.4/.pub-cache/hosted/pub.dartlang.org/firebase_storage_web-3.3.18/

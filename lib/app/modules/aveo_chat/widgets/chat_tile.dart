@@ -11,15 +11,11 @@ class ChatTile extends GetView<AveoChatController> {
 
   @override
   Widget build(BuildContext context) {
-    String chatName = AveoChatConfig.instance.chatServiceFramework
-        .getChatRoomName(
-            chat: chat, thisUserId: AveoChatConfig.instance.user.userId);
     return ListTile(
       onTap: () {
         FocusManager.instance.primaryFocus!.unfocus();
-        final ChatRoomController chatRoomController =
-            Get.put(ChatRoomController(chat: chat));
 
+        Get.put(ChatRoomController(chat: chat));
         Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => ChatRoomView(),
         ));
@@ -30,16 +26,9 @@ class ChatTile extends GetView<AveoChatController> {
         backgroundColor:
             AveoChatConfig.instance.aveoChatOptions.avatarBackgroundColor ??
                 Theme.of(context).primaryColor,
-        child: Text((AveoChatConfig.instance.chatServiceFramework
-                .getChatRoomName(
-                    chat: chat,
-                    thisUserId: AveoChatConfig.instance.user.userId))[0]
-            .toUpperCase()),
+        child: Text(chat.chatName[0]),
       ),
-      title: Text(AveoChatConfig.instance.chatServiceFramework
-          .getChatRoomName(
-              chat: chat, thisUserId: AveoChatConfig.instance.user.userId)
-          .toTitleCase()),
+      title: Text(chat.chatName),
     );
   }
 }
