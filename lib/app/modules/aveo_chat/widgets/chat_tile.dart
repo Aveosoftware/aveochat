@@ -17,7 +17,7 @@ class ChatTile extends GetView<AveoChatController> {
 
         Get.put(ChatRoomController(chat: chat));
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => ChatRoomView(),
+          builder: (context) => const ChatRoomView(),
         ));
       },
       tileColor: AveoChatConfig.instance.aveoChatOptions.chatTileColor,

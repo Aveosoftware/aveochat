@@ -227,7 +227,7 @@ class MessageBubble extends StatelessWidget {
           ),
           caption.isNotEmpty
               ? Padding(
-                  padding: const EdgeInsets.only(left: 12.0, right: 12.0),
+                  padding: const EdgeInsets.only(left: 8.0, right: 8.0),
                   child: Text(
                     caption,
                     // textAlign: isMessageSent ? TextAlign.end : TextAlign.start,
