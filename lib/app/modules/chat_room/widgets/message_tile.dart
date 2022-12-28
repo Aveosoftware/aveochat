@@ -3,6 +3,7 @@ part of '../../../../aveochat.dart';
 class MessageBubble extends StatelessWidget {
   final String msgType;
   final String message;
+  final String caption;
   final bool isMessageSent;
   final Color sentMessageColor;
   final Color receivedMessageColor;
@@ -19,6 +20,7 @@ class MessageBubble extends StatelessWidget {
     super.key,
     required this.msgType,
     required this.message,
+    required this.caption,
     required this.isMessageSent,
     required this.sentMessageColor,
     required this.receivedMessageColor,
@@ -163,56 +165,81 @@ class MessageBubble extends StatelessWidget {
   }
 
   msgTypeImage(context) {
-    return Container(
-      height: 200,
+    return SizedBox(
       width: 140,
-      padding: const EdgeInsets.only(top: 3.0, left: 3.0, right: 3.0),
-      child: Visibility(
-        visible: message.isNotEmpty,
-        replacement: const Center(
-          child: CupertinoActivityIndicator(),
-        ),
-        child: GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ImageViewer(tag: message, url: message),
+      child: Column(
+        crossAxisAlignment:
+            isMessageSent ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        children: [
+          Container(
+            height: 200,
+            width: 140,
+            padding: const EdgeInsets.only(top: 3.0, left: 3.0, right: 3.0),
+            child: Visibility(
+              visible: message.isNotEmpty,
+              replacement: const Center(
+                child: CupertinoActivityIndicator(),
               ),
-            );
-          },
-          child: Hero(
-            tag: message,
-            child: CachedNetworkImage(
-              imageUrl: message,
-              imageBuilder: (context, imageProvider) {
-                return Container(
-                  width: 80.0,
-                  height: 80.0,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      topLeft: const Radius.circular(14),
-                      topRight: const Radius.circular(14),
-                      bottomRight: isMessageSent
-                          ? Radius.zero
-                          : const Radius.circular(14),
-                      bottomLeft: isMessageSent
-                          ? const Radius.circular(14)
-                          : Radius.zero,
+              child: GestureDetector(
+                onTap: () {
+                  FocusScope.of(context).unfocus();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          ImageViewer(tag: message, url: message),
                     ),
-                    image: DecorationImage(
-                        image: imageProvider, fit: BoxFit.cover),
+                  );
+                },
+                child: Hero(
+                  tag: message,
+                  child: CachedNetworkImage(
+                    imageUrl: message,
+                    imageBuilder: (context, imageProvider) {
+                      return Container(
+                        width: 80.0,
+                        height: 80.0,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                            topLeft: const Radius.circular(14),
+                            topRight: const Radius.circular(14),
+                            bottomRight: isMessageSent
+                                ? Radius.zero
+                                : const Radius.circular(14),
+                            bottomLeft: isMessageSent
+                                ? const Radius.circular(14)
+                                : Radius.zero,
+                          ),
+                          image: DecorationImage(
+                              image: imageProvider, fit: BoxFit.cover),
+                        ),
+                      );
+                    },
+                    placeholder: (context, url) {
+                      return const Center(
+                        child: CupertinoActivityIndicator(),
+                      );
+                    },
                   ),
-                );
-              },
-              placeholder: (context, url) {
-                return const Center(
-                  child: CupertinoActivityIndicator(),
-                );
-              },
+                ),
+              ),
             ),
           ),
-        ),
+          caption.isNotEmpty
+              ? Padding(
+                  padding: const EdgeInsets.only(left: 12.0, right: 12.0),
+                  child: Text(
+                    caption,
+                    // textAlign: isMessageSent ? TextAlign.end : TextAlign.start,
+                    style: TextStyle(
+                      color: isMessageSent
+                          ? sentMessageColor
+                          : receivedMessageColor,
+                    ),
+                  ),
+                )
+              : const SizedBox.shrink(),
+        ],
       ),
     );
   }

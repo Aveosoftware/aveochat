@@ -15,11 +15,14 @@ class ChatRoomController extends GetxController {
   ChatRoomModel chat;
   late StreamController<List<Message>> conversationStream = StreamController();
   TextEditingController messageController = TextEditingController();
+  TextEditingController captionController = TextEditingController();
 
   RxList<Message> selectionList = <Message>[].obs;
   RxBool hasSelectionStarted = false.obs;
 
   RxList<PickedFile> pickedFiles = <PickedFile>[].obs;
+  Rx<PickedFile> selectedPickedFile =
+      PickedFile(msgType: '', fileName: '', pathOrUrl: '').obs;
 
   @override
   void onInit() {
@@ -185,6 +188,8 @@ class ChatRoomController extends GetxController {
   sendMessage() async {
     if (messageController.text.trim().isNotEmpty || pickedFiles.isNotEmpty) {
       List<Future> parentFuture = [];
+
+      // TEXT MESSAGE
       if (messageController.text.trim().isNotEmpty) {
         try {
           String trimmedMsg = messageController.text.trim();
@@ -194,6 +199,8 @@ class ChatRoomController extends GetxController {
           log(e.toString());
         }
       }
+
+      // MEDIA MESSAGE
       if (pickedFiles.isNotEmpty) {
         List<PickedFile> files = RxList(pickedFiles);
         pickedFiles.clear();
@@ -201,6 +208,8 @@ class ChatRoomController extends GetxController {
         // Futures of indivisual image docs.
         List<Future> futures = [];
         for (PickedFile file in files) {
+          selectedPickedFile.value =
+              PickedFile(msgType: '', fileName: '', pathOrUrl: '');
           // Future of single File a
           List<Future> singleFileFuture = [];
           var ref = StorageRef.getImageRef.child(file.fileName);
@@ -214,14 +223,17 @@ class ChatRoomController extends GetxController {
           }
 
           // Put file and when done, Update the empty entry with download url.
-          singleFileFuture.add(ref
-              .putFile(File(file.pathOrUrl))
-              .then((p0) async => docref.update(Message(
+          singleFileFuture.add(
+            ref.putFile(File(file.pathOrUrl)).then(
+                  (p0) async => docref.update(Message(
                     message: await ref.getDownloadURL(),
+                    caption: file.caption,
                     type: file.msgType,
                     sentBy: AveoChatConfig.instance.user.userId,
                     timestamp: DateTime.now().toUtc().toIso8601String(),
-                  ).toMap())));
+                  ).toMap()),
+                ),
+          );
 
           futures.add(Future.wait(singleFileFuture));
         }

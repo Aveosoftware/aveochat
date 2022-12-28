@@ -24,11 +24,16 @@ class MsgType {
 
 class PickedFile {
   final String msgType;
-  final String fileName;
+  String fileName;
+  String caption;
   final String pathOrUrl;
 
-  PickedFile(
-      {required this.msgType, required this.fileName, required this.pathOrUrl});
+  PickedFile({
+    required this.msgType,
+    required this.fileName,
+    this.caption = '',
+    required this.pathOrUrl,
+  });
 }
 
 class StorageRef {

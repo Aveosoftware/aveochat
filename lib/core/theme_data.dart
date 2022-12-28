@@ -1,6 +1,7 @@
 part of '../../aveochat.dart';
 
 class ChatRoomThemeData {
+  final String captionHint;
   final String messageHint;
   final Icon sendIcon;
   final Color? sentMessageColor;
@@ -15,6 +16,7 @@ class ChatRoomThemeData {
   final ChatRoomAppBarThemeData chatRoomAppBarThemeData;
 
   const ChatRoomThemeData({
+    this.captionHint = 'Write a caption...',
     this.messageHint = 'Message',
     this.sendIcon = const Icon(
       Icons.send,

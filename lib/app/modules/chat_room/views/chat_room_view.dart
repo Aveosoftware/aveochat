@@ -94,6 +94,7 @@ class _ChatRoomViewState extends State<ChatRoomView> {
                                 null,
                             isDeleted: snapshot.data![index].isDeleted,
                             message: snapshot.data![index].message,
+                            caption: snapshot.data![index].caption,
                             isMessageSent: snapshot.data![index].sentBy ==
                                 AveoChatConfig.instance.user.userId,
                             timestamp: snapshot.data![index].timestamp,
@@ -171,17 +172,33 @@ class _ChatRoomViewState extends State<ChatRoomView> {
             dense: true,
             minVerticalPadding: 0,
             minLeadingWidth: 0,
-            title: TextFormField(
-              controller: controller.messageController,
-              minLines: 1,
-              maxLines: 6,
-              decoration: InputDecoration(
-                hintText: AveoChatConfig
-                    .instance.aveoChatOptions.chatRoomThemeData.messageHint,
-                focusedBorder:
-                    const OutlineInputBorder(borderSide: BorderSide.none),
-                enabledBorder:
-                    const OutlineInputBorder(borderSide: BorderSide.none),
+            title: Obx(
+              () => TextFormField(
+                controller: controller.selectedPickedFile.value.fileName != ''
+                    ? controller.captionController
+                    : controller.messageController,
+                minLines: 1,
+                maxLines: 6,
+                decoration: InputDecoration(
+                  hintText: controller.selectedPickedFile.value.fileName != ''
+                      ? AveoChatConfig.instance.aveoChatOptions
+                          .chatRoomThemeData.captionHint
+                      : AveoChatConfig.instance.aveoChatOptions
+                          .chatRoomThemeData.messageHint,
+                  focusedBorder:
+                      const OutlineInputBorder(borderSide: BorderSide.none),
+                  enabledBorder:
+                      const OutlineInputBorder(borderSide: BorderSide.none),
+                ),
+                onChanged: (value) {
+                  if (controller.selectedPickedFile.value.fileName != '') {
+                    controller.pickedFiles
+                        .firstWhere((element) =>
+                            element.fileName ==
+                            controller.selectedPickedFile.value.fileName)
+                        .caption = value;
+                  }
+                },
               ),
             ),
             contentPadding: const EdgeInsets.only(left: 12, right: 4),
