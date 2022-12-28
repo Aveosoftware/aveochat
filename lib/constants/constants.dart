@@ -15,6 +15,31 @@ class ReadStatus {
   static const READ = 1;
 }
 
+class MsgType {
+  static const text = 'text';
+  static const image = 'image';
+  static const video = 'video';
+  static const audio = 'audio';
+}
+
+class PickedFile {
+  final String msgType;
+  final String fileName;
+  final String pathOrUrl;
+
+  PickedFile(
+      {required this.msgType, required this.fileName, required this.pathOrUrl});
+}
+
+class StorageRef {
+  static Reference get getImageRef =>
+      FirebaseStorage.instance.ref().child('image');
+  static Reference get getVideoRef =>
+      FirebaseStorage.instance.ref().child('video');
+  static Reference get getAudioRef =>
+      FirebaseStorage.instance.ref().child('audio');
+}
+
 extension StringCasingExtension on String {
   String toCapitalized() =>
       length > 0 ? '${this[0].toUpperCase()}${substring(1).toLowerCase()}' : '';

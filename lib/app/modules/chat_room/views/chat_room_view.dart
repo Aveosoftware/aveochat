@@ -1,3 +1,4 @@
+import 'package:aveochat/app/modules/chat_room/widgets/files_picked.dart';
 import 'package:aveochat/aveochat.dart';
 import 'package:flutter/material.dart';
 
@@ -84,6 +85,7 @@ class _ChatRoomViewState extends State<ChatRoomView> {
                     itemBuilder: (context, index) {
                       return Obx(() => MessageBubble(
                             context,
+                            msgType: snapshot.data![index].type,
                             readStatus: snapshot.data![index].readStatus,
                             isSelected: controller.selectionList
                                     .firstWhereOrNull((element) =>
@@ -125,7 +127,7 @@ class _ChatRoomViewState extends State<ChatRoomView> {
                                             element.msgId ==
                                             snapshot.data![index].msgId) !=
                                     null) {
-                                  controller.selectionList.value
+                                  controller.selectionList
                                       .remove(snapshot.data![index]);
                                   controller.selectionList.refresh();
                                   if (controller.selectionList.isEmpty) {
@@ -135,7 +137,7 @@ class _ChatRoomViewState extends State<ChatRoomView> {
                                 } else {
                                   if (snapshot.data![index].sentBy ==
                                       AveoChatConfig.instance.user.userId) {
-                                    controller.selectionList.value
+                                    controller.selectionList
                                         .add(snapshot.data![index]);
                                     controller.selectionList.refresh();
                                   }
@@ -146,6 +148,7 @@ class _ChatRoomViewState extends State<ChatRoomView> {
                     },
                   ),
                 ),
+                const FilesPicked()
               ],
             );
           }
@@ -181,29 +184,19 @@ class _ChatRoomViewState extends State<ChatRoomView> {
                     const OutlineInputBorder(borderSide: BorderSide.none),
               ),
             ),
-            trailing: IconButton(
-              icon: AveoChatConfig
-                  .instance.aveoChatOptions.chatRoomThemeData.sendIcon,
-              onPressed: () async {
-                if (controller.messageController.text.trim().isNotEmpty) {
-                  try {
-                    String trimmedMsg =
-                        controller.messageController.text.trim();
-                    controller.messageController.clear();
-                    await AveoChatConfig.instance.chatServiceFramework
-                        .sendMessageByChatId(
-                      chatId: controller.chat.chatId,
-                      message: Message(
-                        message: trimmedMsg,
-                        sentBy: AveoChatConfig.instance.user.userId,
-                        timestamp: DateTime.now().toUtc().toIso8601String(),
-                      ),
-                    );
-                  } catch (e) {
-                    print(e);
-                  }
-                }
-              },
+            contentPadding: const EdgeInsets.only(left: 12, right: 4),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const FilesPickerButton(),
+                IconButton(
+                  icon: AveoChatConfig
+                      .instance.aveoChatOptions.chatRoomThemeData.sendIcon,
+                  onPressed: () async {
+                    await controller.sendMessage();
+                  },
+                ),
+              ],
             ),
           ),
         ),

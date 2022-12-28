@@ -1,6 +1,7 @@
 part of '../../../../aveochat.dart';
 
 class MessageBubble extends StatelessWidget {
+  final String msgType;
   final String message;
   final bool isMessageSent;
   final Color sentMessageColor;
@@ -16,6 +17,7 @@ class MessageBubble extends StatelessWidget {
   const MessageBubble(
     BuildContext context, {
     super.key,
+    required this.msgType,
     required this.message,
     required this.isMessageSent,
     required this.sentMessageColor,
@@ -53,81 +55,80 @@ class MessageBubble extends StatelessWidget {
                   isMessageSent ? const Radius.circular(14) : Radius.zero,
             ),
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: isMessageSent
                 ? CrossAxisAlignment.end
                 : CrossAxisAlignment.start,
             children: [
-              ReadMoreText(
-                isDeleted
-                    ? isMessageSent
-                        ? "🚫 You deleted this message"
-                        : "🚫 This message was deleted"
-                    : message,
-                textAlign: TextAlign.start,
-                colorClickableText: isMessageSent
-                    ? sentMessageColor.withOpacity(0.6)
-                    : receivedMessageColor.withOpacity(0.6),
-                trimMode: TrimMode.Length,
-                trimCollapsedText: 'Show more',
-                trimExpandedText: 'Show less',
-                style: TextStyle(
-                  fontStyle: isDeleted ? FontStyle.italic : FontStyle.normal,
-                  color:
-                      isMessageSent ? sentMessageColor : receivedMessageColor,
-                ),
+              ((() {
+                switch (msgType) {
+                  case MsgType.text:
+                    return msgTypeText();
+                  case MsgType.image:
+                    return msgTypeImage(context);
+                  case MsgType.video:
+                    return msgTypeVideo();
+                  case MsgType.audio:
+                    return msgTypeAudio();
+                }
+              })()),
+              const SizedBox(
+                height: 2,
               ),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  AveoChatConfig.instance.aveoChatOptions.chatRoomThemeData
-                              .showTimestamp &&
-                          !isDeleted
-                      ? Text(
-                          DateFormat('jm')
-                              .format(DateTime.parse(timestamp!).toLocal()),
-                          textAlign: TextAlign.end,
-                          style: TextStyle(
-                            color: isMessageSent
-                                ? sentMessageColor.withOpacity(0.7)
-                                : receivedMessageColor.withOpacity(0.7),
-                            fontSize: 11,
-                          ),
-                        )
-                      : Container(),
-                  AveoChatConfig.instance.aveoChatOptions.chatRoomThemeData
-                              .enableReadReciepts &&
-                          !isDeleted
-                      ? isMessageSent
-                          ? const SizedBox(
-                              width: 8.0,
-                            )
-                          : Container()
-                      : Container(),
-                  AveoChatConfig.instance.aveoChatOptions.chatRoomThemeData
-                              .enableReadReciepts &&
-                          !isDeleted
-                      ? isMessageSent
-                          ? readStatus == ReadStatus.READ
-                              ? Icon(
-                                  Icons.done_all,
-                                  size: 12,
-                                  color: isMessageSent
-                                      ? sentMessageColor.withOpacity(0.9)
-                                      : receivedMessageColor.withOpacity(0.9),
-                                )
-                              : Icon(
-                                  Icons.done,
-                                  size: 12,
-                                  color: isMessageSent
-                                      ? sentMessageColor.withOpacity(0.9)
-                                      : receivedMessageColor.withOpacity(0.9),
-                                )
-                          : Container()
-                      : Container(),
-                ],
+              Padding(
+                padding:
+                    const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 4.0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    AveoChatConfig.instance.aveoChatOptions.chatRoomThemeData
+                                .showTimestamp &&
+                            !isDeleted
+                        ? Text(
+                            DateFormat('jm')
+                                .format(DateTime.parse(timestamp!).toLocal()),
+                            textAlign: TextAlign.end,
+                            style: TextStyle(
+                              color: isMessageSent
+                                  ? sentMessageColor.withOpacity(0.7)
+                                  : receivedMessageColor.withOpacity(0.7),
+                              fontSize: 11,
+                            ),
+                          )
+                        : Container(),
+                    AveoChatConfig.instance.aveoChatOptions.chatRoomThemeData
+                                .enableReadReciepts &&
+                            !isDeleted
+                        ? isMessageSent
+                            ? const SizedBox(
+                                width: 8.0,
+                              )
+                            : Container()
+                        : Container(),
+                    AveoChatConfig.instance.aveoChatOptions.chatRoomThemeData
+                                .enableReadReciepts &&
+                            !isDeleted
+                        ? isMessageSent
+                            ? readStatus == ReadStatus.READ
+                                ? Icon(
+                                    Icons.done_all,
+                                    size: 12,
+                                    color: isMessageSent
+                                        ? sentMessageColor.withOpacity(0.9)
+                                        : receivedMessageColor.withOpacity(0.9),
+                                  )
+                                : Icon(
+                                    Icons.done,
+                                    size: 12,
+                                    color: isMessageSent
+                                        ? sentMessageColor.withOpacity(0.9)
+                                        : receivedMessageColor.withOpacity(0.9),
+                                  )
+                            : Container()
+                        : Container(),
+                  ],
+                ),
               ),
             ],
           ),
@@ -135,4 +136,88 @@ class MessageBubble extends StatelessWidget {
       ),
     );
   }
+
+  msgTypeText() {
+    return Padding(
+      padding:
+          const EdgeInsets.only(top: 6.0, left: 12.0, right: 12.0, bottom: 6.0),
+      child: ReadMoreText(
+        isDeleted
+            ? isMessageSent
+                ? "🚫 You deleted this message"
+                : "🚫 This message was deleted"
+            : message,
+        textAlign: TextAlign.start,
+        colorClickableText: isMessageSent
+            ? sentMessageColor.withOpacity(0.6)
+            : receivedMessageColor.withOpacity(0.6),
+        trimMode: TrimMode.Length,
+        trimCollapsedText: 'Show more',
+        trimExpandedText: 'Show less',
+        style: TextStyle(
+          fontStyle: isDeleted ? FontStyle.italic : FontStyle.normal,
+          color: isMessageSent ? sentMessageColor : receivedMessageColor,
+        ),
+      ),
+    );
+  }
+
+  msgTypeImage(context) {
+    return Container(
+      height: 200,
+      width: 140,
+      padding: const EdgeInsets.only(top: 3.0, left: 3.0, right: 3.0),
+      child: Visibility(
+        visible: message.isNotEmpty,
+        replacement: const Center(
+          child: CupertinoActivityIndicator(),
+        ),
+        child: GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ImageViewer(tag: message, url: message),
+              ),
+            );
+          },
+          child: Hero(
+            tag: message,
+            child: CachedNetworkImage(
+              imageUrl: message,
+              imageBuilder: (context, imageProvider) {
+                return Container(
+                  width: 80.0,
+                  height: 80.0,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topLeft: const Radius.circular(14),
+                      topRight: const Radius.circular(14),
+                      bottomRight: isMessageSent
+                          ? Radius.zero
+                          : const Radius.circular(14),
+                      bottomLeft: isMessageSent
+                          ? const Radius.circular(14)
+                          : Radius.zero,
+                    ),
+                    image: DecorationImage(
+                        image: imageProvider, fit: BoxFit.cover),
+                  ),
+                );
+              },
+              placeholder: (context, url) {
+                return const Center(
+                  child: CupertinoActivityIndicator(),
+                );
+              },
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  msgTypeVideo() {}
+
+  msgTypeAudio() {}
 }
