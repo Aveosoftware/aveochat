@@ -34,6 +34,7 @@ class ImageViewer extends StatelessWidget {
         ),
         child: CachedNetworkImage(
           imageUrl: url,
+          fit: BoxFit.fitWidth,
           placeholder: (context, url) {
             return const Center(
               child: CupertinoActivityIndicator(),
