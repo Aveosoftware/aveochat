@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:animations/animations.dart';
 import 'package:aveochat/app/modules/chat_room/controllers/chat_room_controller.dart';
 import 'package:aveochat/aveochat.dart';
 import 'package:aveochat/core/image_viewer.dart';
@@ -29,59 +30,64 @@ class FilesPicked extends GetView<ChatRoomController> {
                     child: Stack(
                       alignment: Alignment.bottomLeft,
                       children: [
-                        Obx(() {
-                          // log(controller.selectedPickedFileName.value);
-                          return GestureDetector(
-                            onTap: () {
-                              if (controller
-                                      .selectedPickedFile.value.fileName !=
-                                  controller.pickedFiles[index].fileName) {
-                                controller.selectedPickedFile.value.fileName =
-                                    controller.pickedFiles[index].fileName;
-                              } else {
-                                controller.selectedPickedFile.value.fileName =
-                                    '';
-                              }
-                              controller.selectedPickedFile.update((val) {});
-                              controller.captionController.text =
-                                  controller.pickedFiles[index].caption;
-                              controller.captionController.selection =
-                                  TextSelection.fromPosition(TextPosition(
-                                      offset: controller
-                                          .captionController.text.length));
-                            },
-                            onLongPress: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ImageViewer(
-                                      tag: controller
-                                          .pickedFiles[index].pathOrUrl,
-                                      url: controller
-                                          .pickedFiles[index].pathOrUrl),
+                        OpenContainer(
+                          tappable: false,
+                          openColor: Colors.black,
+                          closedColor: Colors.transparent,
+                          middleColor: Colors.black,
+                          transitionType: ContainerTransitionType.fadeThrough,
+                          closedBuilder: (context, openAction) => Obx(() =>
+                              GestureDetector(
+                                onTap: () {
+                                  if (controller
+                                          .selectedPickedFile.value.fileName !=
+                                      controller.pickedFiles[index].fileName) {
+                                    controller
+                                            .selectedPickedFile.value.fileName =
+                                        controller.pickedFiles[index].fileName;
+                                  } else {
+                                    controller
+                                        .selectedPickedFile.value.fileName = '';
+                                  }
+                                  controller.selectedPickedFile
+                                      .update((val) {});
+                                  controller.captionController.text =
+                                      controller.pickedFiles[index].caption;
+                                  controller.captionController.selection =
+                                      TextSelection.fromPosition(TextPosition(
+                                          offset: controller
+                                              .captionController.text.length));
+                                },
+                                onLongPress: () {
+                                  openAction();
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    border: controller.selectedPickedFile.value
+                                                .fileName ==
+                                            controller
+                                                .pickedFiles[index].fileName
+                                        ? Border.all(
+                                            width: 2,
+                                            color:
+                                                Theme.of(context).primaryColor)
+                                        : null,
+                                  ),
+                                  child: Image(
+                                    height: 70,
+                                    width: 70,
+                                    fit: BoxFit.cover,
+                                    image: FileImage(File(controller
+                                        .pickedFiles[index].pathOrUrl)),
+                                  ),
                                 ),
-                              );
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                border: controller.selectedPickedFile.value
-                                            .fileName ==
-                                        controller.pickedFiles[index].fileName
-                                    ? Border.all(
-                                        width: 2,
-                                        color: Theme.of(context).primaryColor)
-                                    : null,
-                              ),
-                              child: Image(
-                                height: 70,
-                                width: 70,
-                                fit: BoxFit.cover,
-                                image: FileImage(File(
-                                    controller.pickedFiles[index].pathOrUrl)),
-                              ),
-                            ),
-                          );
-                        }),
+                              )),
+                          openBuilder: (context, closeAction) => ImageViewer(
+                            tag: controller.pickedFiles[index].pathOrUrl,
+                            url: controller.pickedFiles[index].pathOrUrl,
+                            closeAction: closeAction,
+                          ),
+                        ),
                         Positioned(
                           right: 2,
                           top: 2,

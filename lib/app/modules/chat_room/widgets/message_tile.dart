@@ -180,19 +180,14 @@ class MessageBubble extends StatelessWidget {
               replacement: const Center(
                 child: CupertinoActivityIndicator(),
               ),
-              child: GestureDetector(
-                onTap: () {
-                  FocusScope.of(context).unfocus();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          ImageViewer(tag: message, url: message),
-                    ),
-                  );
-                },
-                child: Hero(
-                  tag: message,
+              child: OpenContainer(
+                tappable: false,
+                openColor: Colors.black,
+                closedColor: Colors.transparent,
+                middleColor: Colors.black,
+                transitionType: ContainerTransitionType.fadeThrough,
+                closedBuilder: (context, openAction) => GestureDetector(
+                  onTap: openAction,
                   child: CachedNetworkImage(
                     imageUrl: message,
                     imageBuilder: (context, imageProvider) {
@@ -222,6 +217,8 @@ class MessageBubble extends StatelessWidget {
                     },
                   ),
                 ),
+                openBuilder: (context, closeAction) => ImageViewer(
+                    tag: message, url: message, closeAction: closeAction),
               ),
             ),
           ),

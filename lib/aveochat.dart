@@ -2,6 +2,7 @@ library aveochat;
 
 import 'dart:async';
 
+import 'package:animations/animations.dart';
 import 'package:aveochat/app/modules/chat_room/controllers/chat_room_controller.dart';
 import 'package:aveochat/app/modules/chat_room/views/chat_room_view.dart';
 import 'package:aveochat/core/image_viewer.dart';
