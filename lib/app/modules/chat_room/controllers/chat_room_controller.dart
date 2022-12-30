@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:aveochat/aveochat.dart';
+import 'package:aveochat/models/picked_file.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -225,12 +226,10 @@ class ChatRoomController extends GetxController {
           // Put file and when done, Update the empty entry with download url.
           singleFileFuture.add(
             ref.putFile(File(file.pathOrUrl)).then(
-                  (p0) async => docref.update(Message(
+                  (p0) async => docref.update(MessageUpdate(
                     message: await ref.getDownloadURL(),
                     caption: file.caption,
                     type: file.msgType,
-                    sentBy: AveoChatConfig.instance.user.userId,
-                    timestamp: DateTime.now().toUtc().toIso8601String(),
                   ).toMap()),
                 ),
           );

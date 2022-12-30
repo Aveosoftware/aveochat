@@ -1,15 +1,12 @@
 library aveochat;
 
 import 'dart:async';
-
-import 'package:animations/animations.dart';
 import 'package:aveochat/app/modules/chat_room/controllers/chat_room_controller.dart';
 import 'package:aveochat/app/modules/chat_room/views/chat_room_view.dart';
-import 'package:aveochat/core/image_viewer.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:aveochat/app/modules/chat_room/widgets/audio_message_bubble.dart';
+import 'package:aveochat/app/modules/chat_room/widgets/image_message_bubble.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

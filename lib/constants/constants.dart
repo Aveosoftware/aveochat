@@ -22,20 +22,6 @@ class MsgType {
   static const audio = 'audio';
 }
 
-class PickedFile {
-  final String msgType;
-  String fileName;
-  String caption;
-  final String pathOrUrl;
-
-  PickedFile({
-    required this.msgType,
-    required this.fileName,
-    this.caption = '',
-    required this.pathOrUrl,
-  });
-}
-
 class StorageRef {
   static Reference get getImageRef =>
       FirebaseStorage.instance.ref().child('image');

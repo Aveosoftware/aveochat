@@ -68,11 +68,23 @@ class MessageBubble extends StatelessWidget {
                   case MsgType.text:
                     return msgTypeText();
                   case MsgType.image:
-                    return msgTypeImage(context);
+                    return ImageMessageBubble(
+                      message: message,
+                      caption: caption,
+                      isMessageSent: isMessageSent,
+                      receivedMessageColor: receivedMessageColor,
+                      sentMessageColor: sentMessageColor,
+                    );
                   case MsgType.video:
                     return msgTypeVideo();
                   case MsgType.audio:
-                    return msgTypeAudio();
+                    return AudioMessageBubble(
+                      message: message,
+                      caption: caption,
+                      isMessageSent: isMessageSent,
+                      receivedMessageColor: receivedMessageColor,
+                      sentMessageColor: sentMessageColor,
+                    );
                 }
               })()),
               const SizedBox(
@@ -164,84 +176,11 @@ class MessageBubble extends StatelessWidget {
     );
   }
 
-  msgTypeImage(context) {
-    return SizedBox(
-      width: 140,
-      child: Column(
-        crossAxisAlignment:
-            isMessageSent ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-        children: [
-          Container(
-            height: 200,
-            width: 140,
-            padding: const EdgeInsets.only(top: 3.0, left: 3.0, right: 3.0),
-            child: Visibility(
-              visible: message.isNotEmpty,
-              replacement: const Center(
-                child: CupertinoActivityIndicator(),
-              ),
-              child: OpenContainer(
-                tappable: false,
-                openColor: Colors.black,
-                closedColor: Colors.transparent,
-                middleColor: Colors.black,
-                transitionType: ContainerTransitionType.fadeThrough,
-                closedBuilder: (context, openAction) => GestureDetector(
-                  onTap: openAction,
-                  child: CachedNetworkImage(
-                    imageUrl: message,
-                    imageBuilder: (context, imageProvider) {
-                      return Container(
-                        width: 80.0,
-                        height: 80.0,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                            topLeft: const Radius.circular(14),
-                            topRight: const Radius.circular(14),
-                            bottomRight: isMessageSent
-                                ? Radius.zero
-                                : const Radius.circular(14),
-                            bottomLeft: isMessageSent
-                                ? const Radius.circular(14)
-                                : Radius.zero,
-                          ),
-                          image: DecorationImage(
-                              image: imageProvider, fit: BoxFit.cover),
-                        ),
-                      );
-                    },
-                    placeholder: (context, url) {
-                      return const Center(
-                        child: CupertinoActivityIndicator(),
-                      );
-                    },
-                  ),
-                ),
-                openBuilder: (context, closeAction) => ImageViewer(
-                    tag: message, url: message, closeAction: closeAction),
-              ),
-            ),
-          ),
-          caption.isNotEmpty
-              ? Padding(
-                  padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-                  child: Text(
-                    caption,
-                    // textAlign: isMessageSent ? TextAlign.end : TextAlign.start,
-                    style: TextStyle(
-                      color: isMessageSent
-                          ? sentMessageColor
-                          : receivedMessageColor,
-                    ),
-                  ),
-                )
-              : const SizedBox.shrink(),
-        ],
-      ),
+  msgTypeVideo() {
+    return Container(
+      constraints: BoxConstraints(
+          maxHeight: 60, minHeight: 60, maxWidth: 140, minWidth: 140),
+      child: Text("VIDEO HAI"),
     );
   }
-
-  msgTypeVideo() {}
-
-  msgTypeAudio() {}
 }

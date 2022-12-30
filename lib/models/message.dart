@@ -48,3 +48,31 @@ class Message {
     );
   }
 }
+
+class MessageUpdate {
+  String message;
+  String caption;
+  String type;
+
+  MessageUpdate({
+    required this.message,
+    this.caption = '',
+    required this.type,
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'message': message,
+      'caption': caption,
+      'type': type,
+    };
+  }
+
+  factory MessageUpdate.fromMap(Map<String, dynamic> map) {
+    return MessageUpdate(
+      message: map.containsKey('message') ? map['message'] as String : '',
+      caption: map.containsKey('caption') ? map['caption'] as String : '',
+      type: map.containsKey('type') ? map['type'] as String : 'text',
+    );
+  }
+}
