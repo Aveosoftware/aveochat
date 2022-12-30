@@ -23,12 +23,33 @@ class MsgType {
 }
 
 class StorageRef {
-  static Reference get getImageRef =>
-      FirebaseStorage.instance.ref().child('image');
-  static Reference get getVideoRef =>
-      FirebaseStorage.instance.ref().child('video');
-  static Reference get getAudioRef =>
-      FirebaseStorage.instance.ref().child('audio');
+  static Reference get getImageRef => FirebaseStorage.instance
+      .ref()
+      .child('users')
+      .child(AveoChatConfig.instance.user.userId)
+      .child('image');
+  static Reference get getVideoRef => FirebaseStorage.instance
+      .ref()
+      .child('users')
+      .child(AveoChatConfig.instance.user.userId)
+      .child('video');
+  static Reference get getAudioRef => FirebaseStorage.instance
+      .ref()
+      .child('users')
+      .child(AveoChatConfig.instance.user.userId)
+      .child('audio');
+
+  static getRefByMsgTyoe(String msgType) {
+    switch (msgType) {
+      case MsgType.image:
+        return getImageRef;
+      case MsgType.audio:
+        return getAudioRef;
+      case MsgType.video:
+        return getVideoRef;
+      default:
+    }
+  }
 }
 
 extension StringCasingExtension on String {

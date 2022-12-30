@@ -188,8 +188,9 @@ class _AudioMessageBubbleState extends State<AudioMessageBubble>
         }
       });
     } catch (e) {
+      log("URL : ${widget.message}");
       log(e.toString());
-      hasLoaded.value = null; // false due to error
+      hasLoaded.value = null; // null due to error
     }
 
     log(_duration.toString());

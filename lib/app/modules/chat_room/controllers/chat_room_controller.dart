@@ -213,7 +213,8 @@ class ChatRoomController extends GetxController {
               PickedFile(msgType: '', fileName: '', pathOrUrl: '');
           // Future of single File a
           List<Future> singleFileFuture = [];
-          var ref = StorageRef.getImageRef.child(file.fileName);
+          var ref =
+              StorageRef.getRefByMsgTyoe(file.msgType).child(file.fileName);
 
           // Create an empty entry in firestore.
           DocumentReference<Map<String, dynamic>>? docref =
