@@ -76,7 +76,13 @@ class MessageBubble extends StatelessWidget {
                       sentMessageColor: sentMessageColor,
                     );
                   case MsgType.video:
-                    return msgTypeVideo();
+                    return VideoMessageBubble(
+                      message: message,
+                      caption: caption,
+                      isMessageSent: isMessageSent,
+                      receivedMessageColor: receivedMessageColor,
+                      sentMessageColor: sentMessageColor,
+                    );
                   case MsgType.audio:
                     return AudioMessageBubble(
                       message: message,
