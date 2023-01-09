@@ -1,3 +1,4 @@
+import 'package:aveochat/app/modules/chat_room/widgets/files_picked.dart';
 import 'package:aveochat/aveochat.dart';
 import 'package:flutter/material.dart';
 
@@ -6,7 +7,7 @@ import 'package:get/get.dart';
 import '../controllers/chat_room_controller.dart';
 
 class ChatRoomView extends StatefulWidget {
-  ChatRoomView({
+  const ChatRoomView({
     Key? key,
   }) : super(key: key);
 
@@ -20,24 +21,19 @@ class _ChatRoomViewState extends State<ChatRoomView> {
 
   @override
   Widget build(BuildContext context) {
+    var chatroomThemeData =
+        AveoChatConfig.instance.aveoChatOptions.chatRoomThemeData;
     return Scaffold(
-      backgroundColor: AveoChatConfig
-              .instance.aveoChatOptions.chatRoomThemeData.backgroundColor ??
+      backgroundColor: chatroomThemeData.backgroundColor ??
           Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        title: Text(
-          AveoChatConfig.instance.chatServiceFramework.getChatRoomName(
-              chat: controller.chat,
-              thisUserId: AveoChatConfig.instance.user.userId),
-        ),
-        backgroundColor: AveoChatConfig.instance.aveoChatOptions
-            .chatRoomThemeData.chatRoomAppBarThemeData.backgroundColor,
-        centerTitle: AveoChatConfig.instance.aveoChatOptions.chatRoomThemeData
-            .chatRoomAppBarThemeData.centerTitle,
-        elevation: AveoChatConfig.instance.aveoChatOptions.chatRoomThemeData
-            .chatRoomAppBarThemeData.elevation,
-        foregroundColor: AveoChatConfig.instance.aveoChatOptions
-            .chatRoomThemeData.chatRoomAppBarThemeData.foregroundColor,
+        title: Text(controller.chat.chatName),
+        backgroundColor:
+            chatroomThemeData.chatRoomAppBarThemeData.backgroundColor,
+        centerTitle: chatroomThemeData.chatRoomAppBarThemeData.centerTitle,
+        elevation: chatroomThemeData.chatRoomAppBarThemeData.elevation,
+        foregroundColor:
+            chatroomThemeData.chatRoomAppBarThemeData.foregroundColor,
         actions: [
           AveoChatConfig.instance.aveoChatOptions.allowMessageDeletion
               ? Obx(
@@ -46,8 +42,7 @@ class _ChatRoomViewState extends State<ChatRoomView> {
                           onPressed: () async {
                             await controller.deleteSelection();
                           },
-                          icon: AveoChatConfig.instance.aveoChatOptions
-                              .chatRoomThemeData.deleteMessageIcon,
+                          icon: chatroomThemeData.deleteMessageIcon,
                         )
                       : const SizedBox.shrink(),
                 )
@@ -58,8 +53,7 @@ class _ChatRoomViewState extends State<ChatRoomView> {
                     onPressed: () async {
                       await controller.copySelection();
                     },
-                    icon: AveoChatConfig.instance.aveoChatOptions
-                        .chatRoomThemeData.copyMessageIcon,
+                    icon: chatroomThemeData.copyMessageIcon,
                   )
                 : const SizedBox.shrink(),
           )
@@ -91,6 +85,7 @@ class _ChatRoomViewState extends State<ChatRoomView> {
                     itemBuilder: (context, index) {
                       return Obx(() => MessageBubble(
                             context,
+                            msgType: snapshot.data![index].type,
                             readStatus: snapshot.data![index].readStatus,
                             isSelected: controller.selectionList
                                     .firstWhereOrNull((element) =>
@@ -99,33 +94,22 @@ class _ChatRoomViewState extends State<ChatRoomView> {
                                 null,
                             isDeleted: snapshot.data![index].isDeleted,
                             message: snapshot.data![index].message,
+                            caption: snapshot.data![index].caption,
                             isMessageSent: snapshot.data![index].sentBy ==
                                 AveoChatConfig.instance.user.userId,
                             timestamp: snapshot.data![index].timestamp,
-                            receivedMessageTileColor: AveoChatConfig
-                                    .instance
-                                    .aveoChatOptions
-                                    .chatRoomThemeData
-                                    .receivedMessageColor ??
-                                Colors.blueGrey,
-                            receivedMessageColor: AveoChatConfig
-                                    .instance
-                                    .aveoChatOptions
-                                    .chatRoomThemeData
-                                    .receivedMessageColor ??
-                                Colors.white,
-                            sentMessageColor: AveoChatConfig
-                                    .instance
-                                    .aveoChatOptions
-                                    .chatRoomThemeData
-                                    .sentMessageColor ??
-                                Colors.white,
-                            sentMessageTileColor: AveoChatConfig
-                                    .instance
-                                    .aveoChatOptions
-                                    .chatRoomThemeData
-                                    .sentMessageTileColor ??
-                                Theme.of(context).primaryColor,
+                            receivedMessageTileColor:
+                                chatroomThemeData.receivedMessageColor ??
+                                    Colors.blueGrey,
+                            receivedMessageColor:
+                                chatroomThemeData.receivedMessageColor ??
+                                    Colors.white,
+                            sentMessageColor:
+                                chatroomThemeData.sentMessageColor ??
+                                    Colors.white,
+                            sentMessageTileColor:
+                                chatroomThemeData.sentMessageTileColor ??
+                                    Theme.of(context).primaryColor,
                             onLongPress: () {
                               if (!controller.hasSelectionStarted.value &&
                                   !snapshot.data![index].isDeleted &&
@@ -144,7 +128,7 @@ class _ChatRoomViewState extends State<ChatRoomView> {
                                             element.msgId ==
                                             snapshot.data![index].msgId) !=
                                     null) {
-                                  controller.selectionList.value
+                                  controller.selectionList
                                       .remove(snapshot.data![index]);
                                   controller.selectionList.refresh();
                                   if (controller.selectionList.isEmpty) {
@@ -154,7 +138,7 @@ class _ChatRoomViewState extends State<ChatRoomView> {
                                 } else {
                                   if (snapshot.data![index].sentBy ==
                                       AveoChatConfig.instance.user.userId) {
-                                    controller.selectionList.value
+                                    controller.selectionList
                                         .add(snapshot.data![index]);
                                     controller.selectionList.refresh();
                                   }
@@ -165,6 +149,7 @@ class _ChatRoomViewState extends State<ChatRoomView> {
                     },
                   ),
                 ),
+                const FilesPicked()
               ],
             );
           }
@@ -187,42 +172,48 @@ class _ChatRoomViewState extends State<ChatRoomView> {
             dense: true,
             minVerticalPadding: 0,
             minLeadingWidth: 0,
-            title: TextFormField(
-              controller: controller.messageController,
-              minLines: 1,
-              maxLines: 6,
-              decoration: InputDecoration(
-                hintText: AveoChatConfig
-                    .instance.aveoChatOptions.chatRoomThemeData.messageHint,
-                focusedBorder:
-                    const OutlineInputBorder(borderSide: BorderSide.none),
-                enabledBorder:
-                    const OutlineInputBorder(borderSide: BorderSide.none),
+            title: Obx(
+              () => TextFormField(
+                controller: controller.selectedPickedFile.value.fileName != ''
+                    ? controller.captionController
+                    : controller.messageController,
+                minLines: 1,
+                maxLines: 6,
+                decoration: InputDecoration(
+                  hintText: controller.selectedPickedFile.value.fileName != ''
+                      ? AveoChatConfig.instance.aveoChatOptions
+                          .chatRoomThemeData.captionHint
+                      : AveoChatConfig.instance.aveoChatOptions
+                          .chatRoomThemeData.messageHint,
+                  focusedBorder:
+                      const OutlineInputBorder(borderSide: BorderSide.none),
+                  enabledBorder:
+                      const OutlineInputBorder(borderSide: BorderSide.none),
+                ),
+                onChanged: (value) {
+                  if (controller.selectedPickedFile.value.fileName != '') {
+                    controller.pickedFiles
+                        .firstWhere((element) =>
+                            element.fileName ==
+                            controller.selectedPickedFile.value.fileName)
+                        .caption = value;
+                  }
+                },
               ),
             ),
-            trailing: IconButton(
-              icon: AveoChatConfig
-                  .instance.aveoChatOptions.chatRoomThemeData.sendIcon,
-              onPressed: () async {
-                if (controller.messageController.text.trim().isNotEmpty) {
-                  try {
-                    String trimmedMsg =
-                        controller.messageController.text.trim();
-                    controller.messageController.clear();
-                    await AveoChatConfig.instance.chatServiceFramework
-                        .sendMessageByChatId(
-                      chatId: controller.chat.chatId,
-                      message: Message(
-                        message: trimmedMsg,
-                        sentBy: AveoChatConfig.instance.user.userId,
-                        timestamp: DateTime.now().toUtc().toIso8601String(),
-                      ),
-                    );
-                  } catch (e) {
-                    print(e);
-                  }
-                }
-              },
+            contentPadding: const EdgeInsets.only(left: 12, right: 4),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const FilesPickerButton(),
+                IconButton(
+                  icon: AveoChatConfig
+                      .instance.aveoChatOptions.chatRoomThemeData.sendIcon,
+                  onPressed: () async {
+                    await controller.sendMessage();
+                  },
+                ),
+              ],
             ),
           ),
         ),

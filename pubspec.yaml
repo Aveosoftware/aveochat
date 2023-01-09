@@ -16,6 +16,17 @@ dependencies:
   intl: ^0.17.0
   shimmer: ^2.0.0
   get: ^4.6.5
+  firebase_storage: ^11.0.9
+  file_picker: ^5.2.4
+  cached_network_image: ^3.2.1
+  animations: ^2.0.7
+  just_audio: ^0.9.30
+  video_thumbnail: ^0.5.3
+  path_provider: ^2.0.11
+  aveoplayer:
+    git:
+      url: https://gitlab+deploy-token-6:EkZm5zYTvqzar3gZR3cs@gitlab.aveosoft.com/aveo-mobile-products/aveomediaplayer.git
+      ref: master
 
 dev_dependencies:
   flutter_test:

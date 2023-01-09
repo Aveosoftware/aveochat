@@ -15,6 +15,43 @@ class ReadStatus {
   static const READ = 1;
 }
 
+class MsgType {
+  static const text = 'text';
+  static const image = 'image';
+  static const video = 'video';
+  static const audio = 'audio';
+}
+
+class StorageRef {
+  static Reference get getImageRef => FirebaseStorage.instance
+      .ref()
+      .child('users')
+      .child(AveoChatConfig.instance.user.userId)
+      .child('image');
+  static Reference get getVideoRef => FirebaseStorage.instance
+      .ref()
+      .child('users')
+      .child(AveoChatConfig.instance.user.userId)
+      .child('video');
+  static Reference get getAudioRef => FirebaseStorage.instance
+      .ref()
+      .child('users')
+      .child(AveoChatConfig.instance.user.userId)
+      .child('audio');
+
+  static getRefByMsgTyoe(String msgType) {
+    switch (msgType) {
+      case MsgType.image:
+        return getImageRef;
+      case MsgType.audio:
+        return getAudioRef;
+      case MsgType.video:
+        return getVideoRef;
+      default:
+    }
+  }
+}
+
 extension StringCasingExtension on String {
   String toCapitalized() =>
       length > 0 ? '${this[0].toUpperCase()}${substring(1).toLowerCase()}' : '';

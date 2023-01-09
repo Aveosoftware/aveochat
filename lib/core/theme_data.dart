@@ -1,6 +1,7 @@
 part of '../../aveochat.dart';
 
 class ChatRoomThemeData {
+  final String captionHint;
   final String messageHint;
   final Icon sendIcon;
   final Color? sentMessageColor;
@@ -13,8 +14,11 @@ class ChatRoomThemeData {
   final bool showTimestamp;
   final bool enableReadReciepts;
   final ChatRoomAppBarThemeData chatRoomAppBarThemeData;
+  final AudioMessageBubbleThemeData audioMessageBubbleThemeData;
+  final ImageMessageBubbleThemeData imageMessageBubbleThemeData;
 
   const ChatRoomThemeData({
+    this.captionHint = 'Write a caption...',
     this.messageHint = 'Message',
     this.sendIcon = const Icon(
       Icons.send,
@@ -35,6 +39,8 @@ class ChatRoomThemeData {
     this.showTimestamp = true,
     this.enableReadReciepts = true,
     this.chatRoomAppBarThemeData = const ChatRoomAppBarThemeData(),
+    this.audioMessageBubbleThemeData = const AudioMessageBubbleThemeData(),
+    this.imageMessageBubbleThemeData = const ImageMessageBubbleThemeData(),
   });
 }
 
@@ -52,7 +58,56 @@ class ChatRoomAppBarThemeData {
   });
 }
 
-/// AveoChatConfigOptions
+/// [AudioMessageBubbleThemeData]
+///
+/// [DEFAULT] :
+/// keepImageAliveWhenScrolled = true;
+/// bgTintColor = Colors.white24;
+///
+/// ChatRoomThemeData(
+///   audioMessageBubbleThemeData: AudioMessageBubbleThemeData(
+///     keepAudioAliveWhenScrolled: true, // preserve audio message state when scrolled.
+///     bgTintColor: Colors.white10, // Background tint applied to audio player of audio message.
+///   )
+/// )
+///
+class AudioMessageBubbleThemeData {
+  final bool keepAudioAliveWhenScrolled;
+  final Color bgTintColor;
+  const AudioMessageBubbleThemeData({
+    this.keepAudioAliveWhenScrolled = true,
+    this.bgTintColor = Colors.white24,
+  });
+}
+
+/// [ImageMessageBubbleThemeData]
+///
+/// [DEFAULT] :
+/// keepImageAliveWhenScrolled = false;
+///
+/// ChatRoomThemeData(
+///   imageMessageBubbleThemeData: ImageMessageBubbleThemeData(
+///     keepImageAliveWhenScrolled: true, // preserve image message state when scrolled.
+///   )
+/// )
+///
+class ImageMessageBubbleThemeData {
+  final bool keepImageAliveWhenScrolled;
+  const ImageMessageBubbleThemeData({
+    this.keepImageAliveWhenScrolled = false,
+  });
+}
+
+/// [AveoChatConfigOptions]
+///
+/// [DEFAULT] :
+/// allowUserSearch = true;
+/// allowMessageDeletion = true;
+/// searchHint = 'Search';
+/// avatarBackgroundColor = null;
+/// chatTileColor = null;
+/// backgroundColor = null;
+/// chatRoomThemeData = const ChatRoomThemeData()
 ///
 /// This class provides variety of configuration
 /// and theme options within the module.
@@ -69,6 +124,9 @@ class ChatRoomAppBarThemeData {
 ///       ),
 ///     ),
 ///   ));
+///
+/// Explore for more options.
+///
 class AveoChatConfigOptions {
   final bool allowUserSearch;
   final bool allowMessageDeletion;

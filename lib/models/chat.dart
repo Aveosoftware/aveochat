@@ -29,10 +29,20 @@ class ChatRoomModel {
       participants.add(AveoUser.fromMap(item));
     }
 
+    var userName = participants.length == 2
+        ? participants
+            .firstWhere((element) =>
+                element.userId != AveoChatConfig.instance.user.userId)
+            .displayName
+        : map['chatName'];
+    if (userName.trim().isEmpty) {
+      userName = 'Unnamed';
+    }
+
     return ChatRoomModel(
       chatId: map['chatId'],
       participants: participants,
-      chatName: map['chatName'],
+      chatName: userName,
     );
   }
 }
