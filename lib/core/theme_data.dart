@@ -130,6 +130,7 @@ class ImageMessageBubbleThemeData {
 class AveoChatConfigOptions {
   final bool allowUserSearch;
   final bool allowMessageDeletion;
+  final bool allowMessageCopy;
   final String searchHint;
   final Color? avatarBackgroundColor;
   final Color? chatTileColor;
@@ -139,6 +140,7 @@ class AveoChatConfigOptions {
   const AveoChatConfigOptions({
     this.allowUserSearch = true,
     this.allowMessageDeletion = true,
+    this.allowMessageCopy = true,
     this.searchHint = 'Search',
     this.avatarBackgroundColor,
     this.chatTileColor,
