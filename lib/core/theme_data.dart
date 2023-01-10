@@ -131,6 +131,7 @@ class AveoChatConfigOptions {
   final bool allowUserSearch;
   final bool allowMessageDeletion;
   final bool allowMessageCopy;
+  final bool allowMediaSharing;
   final String searchHint;
   final Color? avatarBackgroundColor;
   final Color? chatTileColor;
@@ -141,6 +142,7 @@ class AveoChatConfigOptions {
     this.allowUserSearch = true,
     this.allowMessageDeletion = true,
     this.allowMessageCopy = true,
+    this.allowMediaSharing = true,
     this.searchHint = 'Search',
     this.avatarBackgroundColor,
     this.chatTileColor,

@@ -207,7 +207,9 @@ class _ChatRoomViewState extends State<ChatRoomView> {
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const FilesPickerButton(),
+                AveoChatConfig.instance.aveoChatOptions.allowMediaSharing
+                    ? const FilesPickerButton()
+                    : const SizedBox.shrink(),
                 IconButton(
                   icon: AveoChatConfig
                       .instance.aveoChatOptions.chatRoomThemeData.sendIcon,
