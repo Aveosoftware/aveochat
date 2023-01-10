@@ -47,16 +47,18 @@ class _ChatRoomViewState extends State<ChatRoomView> {
                       : const SizedBox.shrink(),
                 )
               : const SizedBox.shrink(),
-          Obx(
-            () => controller.hasSelectionStarted.value
-                ? IconButton(
-                    onPressed: () async {
-                      await controller.copySelection();
-                    },
-                    icon: chatroomThemeData.copyMessageIcon,
-                  )
-                : const SizedBox.shrink(),
-          )
+          AveoChatConfig.instance.aveoChatOptions.allowMessageCopy
+              ? Obx(
+                  () => controller.hasSelectionStarted.value
+                      ? IconButton(
+                          onPressed: () async {
+                            await controller.copySelection();
+                          },
+                          icon: chatroomThemeData.copyMessageIcon,
+                        )
+                      : const SizedBox.shrink(),
+                )
+              : const SizedBox.shrink(),
         ],
       ),
       body: StreamBuilder(
@@ -205,7 +207,9 @@ class _ChatRoomViewState extends State<ChatRoomView> {
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const FilesPickerButton(),
+                AveoChatConfig.instance.aveoChatOptions.allowMediaSharing
+                    ? const FilesPickerButton()
+                    : const SizedBox.shrink(),
                 IconButton(
                   icon: AveoChatConfig
                       .instance.aveoChatOptions.chatRoomThemeData.sendIcon,
